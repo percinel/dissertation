@@ -15,6 +15,7 @@ $cakeDescription = __d('cake_dev', 'Dissertation Management');
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
 		echo $this->fetch('script');
+		echo $this->Html->script('jquery-1.11.0');
 	?>
 </head>
 <body>

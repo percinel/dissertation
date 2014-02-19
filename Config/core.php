@@ -415,9 +415,12 @@ Configure::write('process_road', array(
 		'actions' => array(
 			'save' => array(
 				'next-state'=>'project-intent',
+				'trans' => 'Kaydet'
 			),
 			'send' => array(
 				'next-state'=>'project-intent-waiting-app',
+				#TODO say in turkish
+				'trans' => 'Danismana Gonder'
 			)
 		),
 		'fields' => array(

@@ -32,6 +32,21 @@ class UsersController extends AppController {
 		}
 	}
 
+	public function home(){
+		$user = $this->Auth->user();
+		$role = $user['role'];
+		
+		if($role == 'student'):
+			$this->redirect(array('controller'=>'processes','action'=>'manage'));
+		elseif($role == 'instructor'):
+			$this->redirect(array('controller'=>'users','action'=>'mystudents'));
+		elseif($role == 'pia'):
+			$this->redirect(array('controller'=>'users','action'=>'manage'));
+		elseif($role == 'bpdk'): 
+			$this->redirect(array('controller'=>'users','action'=>'manage'));
+		endif; 
+	}
+
 	public function logout() {
 		$this->redirect($this->Auth->logout());
 	}

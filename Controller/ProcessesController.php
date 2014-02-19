@@ -23,6 +23,50 @@ class ProcessesController extends AppController {
 		$this->set('process', $this->Process->find('first', $options));
 	}
 
+	# is only for students
+	public function decide() {
+		if ($this->request->is('post')) {
+			$post = $this->request->data;
+			pre($post);	
+			$student_id = $this->Auth->user('id');
+
+			#validation if this process is for this student
+			$current_process = $this->Process->getStudentProcess($student_id);	
+			if($current_process['Process']['id'] != $post['Process']['id'] || $current_process['Process']['student_id'] != $student_id):
+				#TODO fix turkish traslations
+				$this->Session->setFlash(__('You can not manage this dissertation process'));
+				return $this->redirect(array('action' => 'manage'));
+			endif;
+
+			#copy to log
+			if(!$this->Process->copyToLog($current_process,$this->Auth->user('id'))){
+				$this->Session->setFlash(__('This is a serious error, please contact to the developers.'));
+				return $this->redirect(array('action' => 'manage'));
+			}
+	
+
+			pr($log);
+			
+
+			
+
+			
+
+
+			
+
+			
+
+
+			pr($post);
+			pr($current_process);
+
+
+
+				
+		}
+	}
+
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Process->create();
