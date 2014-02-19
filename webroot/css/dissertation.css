@@ -1,0 +1,27 @@
+@charset "utf-8";
+* {
+	margin:0;
+	padding:0;
+}
+
+body {
+	margin: 0;
+	background-color:gray;
+}
+#menu_controls {
+	text-align:right
+}
+
+#header {
+	text-align:center;
+	height:80px;
+}
+#header h1 {
+	font-size:40px;
+}
+.zone_name {
+	font-size:19px;
+}
+.current_zone_name {
+	font-weight:bold;
+}
