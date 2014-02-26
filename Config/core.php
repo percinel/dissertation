@@ -1,36 +1,5 @@
 <?php
-/**
- * This is core configuration file.
- *
- * Use it to configure core behavior of Cake.
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.Config
- * @since         CakePHP(tm) v 0.2.9
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
 
-/**
- * CakePHP Debug Level:
- *
- * Production Mode:
- * 	0: No error messages, errors, or warnings shown. Flash messages redirect.
- *
- * Development Mode:
- * 	1: Errors and warnings shown, model caches refreshed, flash messages halted.
- * 	2: As in 1, but also with full debug messages and SQL output.
- *
- * In production mode, flash messages redirect after a time interval.
- * In development mode, you need to click the flash message to continue.
- */
 	Configure::write('debug', 2);
 
 /**
@@ -397,6 +366,12 @@ Configure::write('process_zones', array(
 	'30' => 'first-report',
 	'40' => 'second-report'
 ));
+Configure::write('process_zones_num', array(
+	'project-intent' => '10',
+	'project-approval' => '20',
+	'first-report' => '30',
+	'second-report' => '40'
+));
 
 Configure::write('process_steps', array(
 	'10' => 'project-intent',
@@ -405,20 +380,66 @@ Configure::write('process_steps', array(
 	'40' => 'project-approval-waiting-app',
 	'50' => 'first-report',
 	'60' => 'first-report-waiting-app',
-	'70' => 'second-report',
-	'80' => 'second-report-waiting-app',
 ));
+
+Configure::write('process_steps_num', array(
+	'project-intent' => '10',
+	'project-intent-waiting-app' => '20',
+	'project-approval' => '30',
+	'project-approval-waiting-app' => '40',
+	'first-report' => '50',
+	'first-report-waiting-app' => '60',
+));
+
+Configure::write('allfields',array(
+	'advisor_id' => array(
+		'trans' => 'Danisman', 
+		'relateddata' => 'advisors' 
+	), 
+	'sreader_id' => array(
+		'trans' => '2. Okuyucu',
+		'relateddata' => 'advisors' 
+	), 
+	'project_header' => array(
+		'trans' => 'Proje Basligi' 
+	), 
+	'project_intent' => array(
+		'trans' => 'Proje Onerisi' 
+	), 
+	'project_header_perm' => array(
+		'trans' => 'Proje Basligi' 
+	), 
+	'project_tags' => array(
+		'trans' => 'Proje Etiketleri' 
+	), 
+	'first_report' => array(
+		'trans' => '1. Ara Rapor', 
+		'file' => true
+	), 
+	'first_report_commect' => array(
+		'trans' => '1. Ara Rapor Yorumu' 
+	), 
+));
+
+Configure::write('instructor_resp',array(20,40,60));
+
+
+Configure::write('process_path',array(
+));
+
 
 Configure::write('process_road', array(
 	'project-intent' => array(
 		'owner'=>'student',
 		'actions' => array(
 			'save' => array(
-				'next-state'=>'project-intent',
+				'next-step'=>'project-intent',
+				'next-zone'=>'project-intent',
 				'trans' => 'Kaydet'
 			),
 			'send' => array(
-				'next-state'=>'project-intent-waiting-app',
+				'next-step'=>'project-intent-waiting-app',
+				'next-zone'=>'project-intent',
 				#TODO say in turkish
 				'trans' => 'Danismana Gonder'
 			)
@@ -427,28 +448,113 @@ Configure::write('process_road', array(
 			'advisor_id',
 			'project_header',
 			'project_intent',
-		)
+		),
+		'zone' => 'project-intent'
 	),
 	'project-intent-waiting-app' => array(
 		'owner'=>'instructor',
+		'actions' => array(
+			'deny' => array(
+				'next-step'=>'project-intent',
+				'next-zone'=>'project-intent',
+				'trans' => 'Reddet'
+			),
+			'approve' => array(
+				'next-step'=>'project-approval',
+				'next-zone'=>'project-approval',
+				#TODO say in turkish
+				'trans' => 'Onayla'
+			)
+		),
+		'fields' => array(
+			'project_header',
+			'project_intent',
+		),
+		'zone' => 'project-intent'
 	),
 	'project-approval' => array(
 		'owner'=>'student',
+		'actions' => array(
+			'save' => array(
+				'next-step'=>'project-approval',
+				'next-zone'=>'project-approval',
+				'trans' => 'Kaydet'
+			),
+			'send' => array(
+				'next-step'=>'project-approval-waiting-app',
+				'next-zone'=>'project-approval',
+				#TODO say in turkish
+				'trans' => 'Danismana Gonder'
+			)
+		),
+		'fields' => array(
+			'project_header_perm',
+			'project_tags',
+		),
+		'zone' => 'project-approval'
 	),
 	'project-approval-waiting-app' => array(
 		'owner'=>'instructor',
+		'actions' => array(
+			'deny' => array(
+				'next-step'=>'project-approval',
+				'next-zone'=>'project-approval',
+				'trans' => 'Reddet'
+			),
+			'approve' => array(
+				'next-step'=>'first-report',
+				'next-zone'=>'first-report',
+				#TODO say in turkish
+				'trans' => 'Onayla'
+			)
+		),
+		'fields' => array(
+			'project_header_perm',
+			'project_tags',
+		),
+		'zone' => 'project-approval'
 	),
 	'first-report' => array(
 		'owner'=>'student',
+		'actions' => array(
+			'save' => array(
+				'next-step'=>'first-report',
+				'next-zone'=>'first-report',
+				'trans' => 'Kaydet'
+			),
+			'send' => array(
+				'next-step'=>'first-report-waiting-app',
+				'next-zone'=>'first-report',
+				#TODO say in turkish
+				'trans' => 'Danismana Gonder'
+			)
+		),
+		'fields' => array(
+			'first_report',
+			'first_report_commect',
+		),
+		'zone' => 'first-report'
 	),
 	'first-report-waiting-app' => array(
 		'owner'=>'instructor',
-	),
-	'second-report' => array(
-		'owner'=>'student',
-	),
-	'second-report-waiting-app' => array(
-		'owner'=>'instructor',
+		'actions' => array(
+			'deny' => array(
+				'next-step'=>'first-report',
+				'next-zone'=>'first-report',
+				'trans' => 'Reddet'
+			),
+			'approve' => array(
+				'next-step'=>'first-report',
+				'next-zone'=>'first-report',
+				#TODO say in turkish
+				'trans' => 'Onayla'
+			)
+		),
+		'fields' => array(
+			'first_report',
+			'first_report_commect',
+		),
+		'zone' => 'first-report'
 	),
 ));
 

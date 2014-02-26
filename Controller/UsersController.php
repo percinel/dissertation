@@ -16,7 +16,7 @@ class UsersController extends AppController {
 				if($role == 'student'):
 					$this->redirect(array('controller'=>'processes','action'=>'manage'));
 				elseif($role == 'instructor'):
-					$this->redirect(array('controller'=>'users','action'=>'mystudents'));
+					$this->redirect(array('controller'=>'processes','action'=>'mystudents'));
 				elseif($role == 'pia'):
 					$this->redirect(array('controller'=>'users','action'=>'manage'));
 				elseif($role == 'bpdk'): 

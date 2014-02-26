@@ -11,6 +11,7 @@ $cakeDescription = __d('cake_dev', 'Dissertation Management');
 	</title>
 	<?php
 		echo $this->Html->meta('icon');
+		echo $this->Html->css('cake.generic');
 		echo $this->Html->css('dissertation');
 		echo $this->fetch('meta');
 		echo $this->fetch('css');

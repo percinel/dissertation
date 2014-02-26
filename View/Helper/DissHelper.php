@@ -14,4 +14,9 @@
 			$actions = $step_conf['actions'];
 			return $actions;
 		}
+
+		public function getZoneTrans($zone) {
+			$o = Configure::read('process_zones_translations');
+			return $o[$zone];
+		}
 	}

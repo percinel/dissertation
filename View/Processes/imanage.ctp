@@ -15,7 +15,7 @@
 <div class="hedes form">
 <?php 
 	echo $this->Form->create('Process',array(
-		'action'=>'decide',
+		'action'=>'idecide',
 		'inputDefaults' => array(
 			'label' => false,
 	#		'div' => false
@@ -31,7 +31,10 @@
 		foreach($related_fields as $f):
 			echo $this->Form->input($f,array(
 				'label'=>$all_fields[$f]['trans'],
-				'value'=>$process['Process'][$f])
+				'value'=>$process['Process'][$f],
+				'readOnly' => true
+			
+				)
 			);
 		endforeach;
 

@@ -30,4 +30,10 @@ App::uses('Model', 'Model');
  * @package       app.Model
  */
 class AppModel extends Model {
+	public function getCurrentStepName($process){
+		$current_step = $process['Process']['step'];
+		$process_steps = Configure::read('process_steps');
+		$step_name = $process_steps[$current_step];
+		return $step_name;
+	}
 }
