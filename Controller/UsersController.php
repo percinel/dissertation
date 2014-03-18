@@ -32,6 +32,33 @@ class UsersController extends AppController {
 		}
 	}
 
+	public function get_mail() {
+        if ($this->request->is('post')) {
+			$this->User->id = $this->Auth->user('id'); 
+            if ($this->User->validates(array('fieldList'=>array('email')))) {
+				$email = $this->request->data['User']['email'];
+				$email_code = Security::hash(rand(1000,10000000).$email.rand(1000,10000000), NULL, true);
+				$message = "You can either follow the <a href='".Router::fullbaseUrl()."/users/confirm/".$email_code."'>link</a><br/>Or you can confirm your email by entering this code $email_code to your ";
+				if($this->sendMail($email,'Email Confirmation Link',$message)) {
+                	$this->Session->setFlash(__('Please check your mail box , we have send a confirmation link.'));
+					$this->User->saveField('email',$email);
+					$this->User->saveField('email_code',$email_code);
+					$this->User->saveField('email_validated',1);
+                	return $this->redirect(array('action' => 'confirm'));
+				}
+                $this->Session->setFlash(__('There is a serious error, please contact with the it help desk'));
+
+				
+            } else {
+                $this->Session->setFlash(__('Please enter a valid email account.'));
+                return $this->redirect(array('action' => 'index'));
+			}
+        }
+	}
+
+	public function confirm() {
+	}
+
 	public function home(){
 		$user = $this->Auth->user();
 		$role = $user['role'];

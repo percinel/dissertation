@@ -25,7 +25,7 @@ $cakeDescription = __d('cake_dev', 'Dissertation Management');
 			<h1>Dissertation Thesis Management</h1>
 			<?php if(!empty($authUser)): ?> 
 			<div id="menu_controls">
-				<?php echo $this->Html->link('Logout',array('controller'=>'users','action'=>'login')); ?>
+				<?php echo $this->Html->link('Logout',array('controller'=>'users','action'=>'logout')); ?>
 			</div>
 			<?php endif; ?>
 		</div>

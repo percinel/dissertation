@@ -22,7 +22,8 @@ class User extends AppModel {
                 'message' => 'Please enter a valid role',
                 'allowEmpty' => false
             )
-        )
+        ),
+        'email' => 'email'
     );
 
 	public $hasMany = array(
