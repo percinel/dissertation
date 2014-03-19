@@ -44,19 +44,42 @@ class UsersController extends AppController {
 					$this->User->saveField('email',$email);
 					$this->User->saveField('email_code',$email_code);
 					$this->User->saveField('email_validated',1);
+					$this->Session->write('Auth', $this->User->read(null, $this->Auth->user('id')));
                 	return $this->redirect(array('action' => 'confirm'));
 				}
                 $this->Session->setFlash(__('There is a serious error, please contact with the it help desk'));
-
-				
             } else {
                 $this->Session->setFlash(__('Please enter a valid email account.'));
-                return $this->redirect(array('action' => 'index'));
+                return $this->redirect('get_mail');
 			}
         }
 	}
 
-	public function confirm() {
+	public function confirm($passcode = null) {
+		if($this->request->is('post')) {
+			$passcode = $this->request->data['User']['passcode'];
+		}
+        if (!is_null($passcode)) {
+			$user_count = $this->User->find('count',array(
+				'conditions'=>array(
+					'User.id' => $this->Auth->user('id'),
+					'User.email_code' => $passcode
+				)
+			));
+
+			#TODO what if we have user_count == 2
+			if($user_count == 1) {
+				$this->User->id = $this->Auth->user('id'); 
+                $this->Session->setFlash(__('You have successfully validated your email'));
+				$this->User->saveField('email_validated',2);
+				$this->Session->write('Auth', $this->User->read(null, $this->Auth->user('id')));
+                return $this->redirect(array('action' => 'home'));
+				
+			} else {
+                $this->Session->setFlash(__('You have a very serious error with your account, please contact with the ithelpdesk'));
+                return $this->redirect(array('action' => 'logout'));
+			}
+        }
 	}
 
 	public function home(){

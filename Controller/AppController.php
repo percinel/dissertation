@@ -29,18 +29,17 @@ class AppController extends Controller {
 	public function beforeFilter() {
 		$authUser = $this->Auth->user();
 		if(!empty($authUser)) {
-			$email_validated = $authUser['email_validated'];
 			$action = $this->request->params['action'];
 			$controller = $this->request->params['controller'];
-			
 			if(!($controller == 'users' and $action == 'logout')) {
-				if(!($controller == 'users' and $action == 'get_mail')) {
-					if($email_validated == 0) {
+				$email_validated = $authUser['email_validated'];
+				if($email_validated == 0) {
+					if(!($controller == 'users' and $action == 'get_mail')) {
 						$this->redirect("/users/get_mail");
 					}
 				}
-				if(!($controller == 'users' and $action == 'confirm')) {
-					if($email_validated == 1) {
+				if($email_validated == 1) {
+					if(!($controller == 'users' and $action == 'confirm')) {
 						$this->redirect("/users/confirm");
 					}
 				}
