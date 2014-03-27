@@ -7,6 +7,11 @@
 			$related_fields = $o[$process_step_name]['fields'];
 			return $related_fields;
 		}
+		public function getRestrictedFields($process_step_name) {
+			$o = Configure::read('process_road');
+			$restricted_fields = $o[$process_step_name]['restrictedFields'];
+			return $restricted_fields;
+		}
 
 		public function getAvaliableActions($process_step_name) {
 			$o = Configure::read('process_road');

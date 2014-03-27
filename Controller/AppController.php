@@ -67,5 +67,16 @@ class AppController extends Controller {
 				)
 			)
 		));
+		if(!empty($authUser)) {
+			$this->set('notification_count',$this->User->Notification->find(
+				'count',
+				array(
+					'conditions'=>array(
+						'Notification.user_id' => $authUser['id'],
+						'Notification.read' => 0,
+					)
+				)
+			));
+		}
 	}
 }

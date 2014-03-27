@@ -42,7 +42,7 @@ CREATE TABLE `logs` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,8 +51,33 @@ CREATE TABLE `logs` (
 
 LOCK TABLES `logs` WRITE;
 /*!40000 ALTER TABLE `logs` DISABLE KEYS */;
-INSERT INTO `logs` VALUES (29,1,0,0,1,10,10,0,'new','','','','','','',1,'2014-02-20 00:00:00','2014-02-20 00:00:00'),(30,1,6,0,1,10,10,1,'save','baslik','ben bunu yapicam','','','','',1,'2014-02-20 00:00:00','2014-02-20 00:00:00'),(31,1,6,0,1,20,10,1,'send','baslik','ben bunu yapicam','','','','',1,'2014-02-20 00:00:00','2014-02-20 00:00:00'),(32,1,6,0,1,10,10,6,'deny','baslik','ben bunu yapicam','','','','',1,'2014-02-20 00:00:00','2014-02-20 00:00:00'),(33,1,6,0,1,20,10,1,'send','baslik begen','ben bunu yapicam','','','','',1,'2014-02-20 00:00:00','2014-02-20 00:00:00'),(34,1,6,0,1,30,20,6,'approve','baslik begen','ben bunu yapicam','','','','',1,'2014-02-20 00:00:00','2014-02-20 00:00:00'),(35,1,6,0,1,30,20,1,'save','baslik begen','ben bunu yapicam','baslik','etiket,etkitet,kola','','',1,'2014-02-20 00:00:00','2014-02-20 00:00:00'),(36,1,6,0,1,40,20,1,'send','baslik begen','ben bunu yapicam','baslik','etiket,etkitet,kola','','',1,'2014-02-20 00:00:00','2014-02-20 00:00:00'),(37,1,6,0,1,30,20,6,'deny','baslik begen','ben bunu yapicam','baslik','etiket,etkitet,kola','','',1,'2014-02-20 00:00:00','2014-02-20 00:00:00'),(38,1,6,0,1,40,20,1,'send','baslik begen','ben bunu yapicam','baslik','etiket,etkitet,kola','','',1,'2014-02-20 00:00:00','2014-02-20 00:00:00'),(39,1,6,0,1,50,30,6,'approve','baslik begen','ben bunu yapicam','baslik','etiket,etkitet,kola','','',1,'2014-02-20 00:00:00','2014-02-20 00:00:00');
 /*!40000 ALTER TABLE `logs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notifications`
+--
+
+DROP TABLE IF EXISTS `notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `message` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `read` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notifications`
+--
+
+LOCK TABLES `notifications` WRITE;
+/*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -72,6 +97,7 @@ CREATE TABLE `processes` (
   `last_user` int(11) NOT NULL DEFAULT '0',
   `last_action` varchar(50) NOT NULL DEFAULT 'created',
   `project_header` varchar(100) NOT NULL,
+  `project_header_comment` text NOT NULL,
   `project_intent` text NOT NULL,
   `project_header_perm` varchar(100) NOT NULL,
   `project_tags` text NOT NULL,
@@ -81,7 +107,7 @@ CREATE TABLE `processes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -90,7 +116,7 @@ CREATE TABLE `processes` (
 
 LOCK TABLES `processes` WRITE;
 /*!40000 ALTER TABLE `processes` DISABLE KEYS */;
-INSERT INTO `processes` VALUES (1,1,6,0,60,30,1,'send','baslik begen','ben bunu yapicam','baslik','etiket,etkitet,kola','dsafs','asd',1,'2014-02-20 00:00:00','2014-02-20 00:00:00');
+INSERT INTO `processes` VALUES (1,1,0,0,10,10,0,'','','','','','','','',1,'2014-02-20 00:00:00','2014-02-20 00:00:00'),(2,2,0,0,10,10,0,'','','','','','','','',1,'2014-02-20 00:00:00','2014-02-20 00:00:00');
 /*!40000 ALTER TABLE `processes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -121,7 +147,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'st1','','edba4817f374729d6eab02742cf9ef740b13020e','student',0,'','2014-02-11 23:11:34','2014-03-18 03:06:53'),(2,'st2',NULL,'edba4817f374729d6eab02742cf9ef740b13020e','student',0,'','2014-02-11 23:11:34','2014-02-11 23:11:34'),(3,'st3',NULL,'edba4817f374729d6eab02742cf9ef740b13020e','student',0,'','2014-02-11 23:11:34','2014-02-11 23:11:34'),(4,'st4',NULL,'edba4817f374729d6eab02742cf9ef740b13020e','student',0,'','2014-02-11 23:11:34','2014-02-11 23:11:34'),(5,'in1',NULL,'edba4817f374729d6eab02742cf9ef740b13020e','instructor',0,'','2014-02-11 23:11:34','2014-02-11 23:11:34'),(6,'in2',NULL,'edba4817f374729d6eab02742cf9ef740b13020e','instructor',0,'','2014-02-11 23:11:34','2014-02-11 23:11:34'),(7,'in3',NULL,'edba4817f374729d6eab02742cf9ef740b13020e','instructor',0,'','2014-02-11 23:11:34','2014-02-11 23:11:34'),(8,'in4',NULL,'edba4817f374729d6eab02742cf9ef740b13020e','instructor',0,'','2014-02-11 23:11:34','2014-02-11 23:11:34'),(9,'pia',NULL,'edba4817f374729d6eab02742cf9ef740b13020e','pia',0,'','2014-02-11 23:11:34','2014-02-11 23:11:34'),(10,'bpdk',NULL,'edba4817f374729d6eab02742cf9ef740b13020e','bpdk',0,'','2014-02-11 23:11:34','2014-02-11 23:11:34');
+INSERT INTO `users` VALUES (1,'st1','','edba4817f374729d6eab02742cf9ef740b13020e','student',0,'','2014-02-11 23:11:34','2014-03-19 05:15:03'),(2,'st2','','edba4817f374729d6eab02742cf9ef740b13020e','student',0,'','2014-02-11 23:11:34','2014-03-19 03:43:40'),(3,'st3',NULL,'edba4817f374729d6eab02742cf9ef740b13020e','student',0,'','2014-02-11 23:11:34','2014-02-11 23:11:34'),(4,'st4',NULL,'edba4817f374729d6eab02742cf9ef740b13020e','student',0,'','2014-02-11 23:11:34','2014-02-11 23:11:34'),(5,'in1','','edba4817f374729d6eab02742cf9ef740b13020e','instructor',0,'','2014-02-11 23:11:34','2014-03-19 05:16:15'),(6,'in2','','edba4817f374729d6eab02742cf9ef740b13020e','instructor',0,'','2014-02-11 23:11:34','2014-03-19 04:52:51'),(7,'in3',NULL,'edba4817f374729d6eab02742cf9ef740b13020e','instructor',0,'','2014-02-11 23:11:34','2014-02-11 23:11:34'),(8,'in4',NULL,'edba4817f374729d6eab02742cf9ef740b13020e','instructor',0,'','2014-02-11 23:11:34','2014-02-11 23:11:34'),(9,'pia',NULL,'edba4817f374729d6eab02742cf9ef740b13020e','pia',0,'','2014-02-11 23:11:34','2014-02-11 23:11:34'),(10,'bpdk',NULL,'edba4817f374729d6eab02742cf9ef740b13020e','bpdk',0,'','2014-02-11 23:11:34','2014-02-11 23:11:34');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -134,4 +160,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-18  3:11:04
+-- Dump completed on 2014-03-19  9:50:01

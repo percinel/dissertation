@@ -95,10 +95,13 @@ class Process extends AppModel {
 		$this->clear();
 		$this->read(null,$process['Process']['id']);
 		$this->set($update_data);
-		$this->save();
+		$notificitions_send = array();
+		if($this->save()) {
+			$notificitions_send = $this->User->Notification->handleNotification($process['Process']['id'],$process,$update_data['last_action']);
+		}
 		
 		#TODO fix validations how do you know about it is being saved.
-		return true;
+		return $notificitions_send;
 	}
 
 	public function getNextStep($process,$action){

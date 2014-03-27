@@ -34,6 +34,11 @@ class ProcessesController extends AppController {
 		$process = $this->Process->find('first',array(
 			'conditions' => array('Process.id'=>$id)
 		));
+		if('instructor' != $this->Process->getProcessOwner($process)){
+			$this->set(compact('process'));
+			$this->render('viewprocess');
+			return;
+		}
 		$this->set(compact('process'));
 	}
 

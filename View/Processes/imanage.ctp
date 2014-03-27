@@ -27,15 +27,21 @@
 		echo $this->Form->input('id',array('value'=>$process['Process']['id']));
 
 		$related_fields = $this->Diss->getStepFields($process_step_name);
+		$restricted_fields = $this->Diss->getRestrictedFields($process_step_name);
 		$all_fields = Configure::read('allfields');
 		foreach($related_fields as $f):
-			echo $this->Form->input($f,array(
-				'label'=>$all_fields[$f]['trans'],
-				'value'=>$process['Process'][$f],
-				'readOnly' => true
-			
-				)
-			);
+			if(in_array($f, $restricted_fields)) {
+				echo $this->Form->input($f,array(
+					'label'=>$all_fields[$f]['trans'],
+					'value'=>$process['Process'][$f],
+					'readOnly' => true
+				));
+			} else {
+				echo $this->Form->input($f,array(
+					'label'=>$all_fields[$f]['trans'],
+					'value'=>$process['Process'][$f],
+				));
+			}
 		endforeach;
 
 		echo $this->Form->input('last_action',array('id'=>'last_action_input','type'=>'hidden'));

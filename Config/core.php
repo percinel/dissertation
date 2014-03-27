@@ -352,6 +352,7 @@ Cache::config('_cake_model_', array(
 	'serialize' => ($engine === 'File'),
 	'duration' => $duration
 ));
+Configure::write('dissertation_url','http://localhost/');
 
 Configure::write('process_zones_translations', array(
 	'10' => 'Proje Oneri Formu',
@@ -403,6 +404,9 @@ Configure::write('allfields',array(
 	'project_header' => array(
 		'trans' => 'Proje Basligi' 
 	), 
+	'project_header_comment' => array(
+		'trans' => 'Danışman Proje Başlığı Yorumu' 
+	), 
 	'project_intent' => array(
 		'trans' => 'Proje Onerisi' 
 	), 
@@ -417,7 +421,7 @@ Configure::write('allfields',array(
 		'file' => true
 	), 
 	'first_report_commect' => array(
-		'trans' => '1. Ara Rapor Yorumu' 
+		'trans' => 'Danışman 1. Ara Rapor Yorumu' 
 	), 
 ));
 
@@ -435,19 +439,31 @@ Configure::write('process_road', array(
 			'save' => array(
 				'next-step'=>'project-intent',
 				'next-zone'=>'project-intent',
-				'trans' => 'Kaydet'
+				'trans' => 'Kaydet',
+				'notify' => array()
 			),
 			'send' => array(
 				'next-step'=>'project-intent-waiting-app',
 				'next-zone'=>'project-intent',
 				#TODO say in turkish
-				'trans' => 'Danismana Gonder'
+				'trans' => 'Danismana Gonder',
+				'notify' => array(
+					'advisor_id' => array(
+						'message'=> "Öğrencilerden biri onaylamanız için size Proje Öneri Formu yolladı",
+						'url' => 'processes/imanage',
+						'includeId' => true
+					)
+				)
 			)
 		),
 		'fields' => array(
 			'advisor_id',
 			'project_header',
 			'project_intent',
+			'project_header_comment',
+		),
+		'restrictedFields' => array(
+			'project_header_comment'
 		),
 		'zone' => 'project-intent'
 	),
@@ -457,18 +473,37 @@ Configure::write('process_road', array(
 			'deny' => array(
 				'next-step'=>'project-intent',
 				'next-zone'=>'project-intent',
-				'trans' => 'Reddet'
+				'trans' => 'Reddet',
+				'notify' => array(
+					'student_id' => array(
+						'message'=> "Seçtiğiniz Danışman Proje Öneri Formunuzu Reddetti",
+						'url' => 'processes/manage',
+						'includeId' => false
+					)
+				)
 			),
 			'approve' => array(
 				'next-step'=>'project-approval',
 				'next-zone'=>'project-approval',
 				#TODO say in turkish
-				'trans' => 'Onayla'
+				'trans' => 'Onayla',
+				'notify' => array(
+					'student_id' => array(
+						'message'=> "Seçtiğiniz Danışman Proje Öneri Formunuzu Onayladı",
+						'url' => 'processes/manage',
+						'includeId' => false
+					)
+				)
 			)
 		),
 		'fields' => array(
 			'project_header',
 			'project_intent',
+			'project_header_comment',
+		),
+		'restrictedFields' => array(
+			'project_header',
+			'project_intent'
 		),
 		'zone' => 'project-intent'
 	),
@@ -484,13 +519,20 @@ Configure::write('process_road', array(
 				'next-step'=>'project-approval-waiting-app',
 				'next-zone'=>'project-approval',
 				#TODO say in turkish
-				'trans' => 'Danismana Gonder'
+				'trans' => 'Danismana Gonder',
+				'notify' => array(
+					'advisor_id' => array(
+						'message'=> "Öğrencilerden biri onaylamanız için size Proje Onay Formu yolladı",
+						'url' => 'processes/imanage',
+						'includeId' => true
+					)
+				)
 			)
 		),
 		'fields' => array(
 			'project_header_perm',
-			'project_tags',
-		),
+		), 
+		'restrictedFields' => array(),
 		'zone' => 'project-approval'
 	),
 	'project-approval-waiting-app' => array(
@@ -499,19 +541,33 @@ Configure::write('process_road', array(
 			'deny' => array(
 				'next-step'=>'project-approval',
 				'next-zone'=>'project-approval',
-				'trans' => 'Reddet'
+				'trans' => 'Reddet',
+				'notify' => array(
+					'student_id' => array(
+						'message'=> "Seçtiğiniz Danışman Proje Onay Formunuzu Reddetti",
+						'url' => 'processes/manage',
+						'includeId' => false
+					)
+				)
 			),
 			'approve' => array(
 				'next-step'=>'first-report',
 				'next-zone'=>'first-report',
 				#TODO say in turkish
-				'trans' => 'Onayla'
+				'trans' => 'Onayla',
+				'notify' => array(
+					'student_id' => array(
+						'message'=> "Seçtiğiniz Danışman Proje Onay Formunuzu Onayladı",
+						'url' => 'processes/manage',
+						'includeId' => false
+					)
+				)
 			)
 		),
 		'fields' => array(
 			'project_header_perm',
-			'project_tags',
 		),
+		'restrictedFields' => array('project_header_perm'),
 		'zone' => 'project-approval'
 	),
 	'first-report' => array(
@@ -520,17 +576,27 @@ Configure::write('process_road', array(
 			'save' => array(
 				'next-step'=>'first-report',
 				'next-zone'=>'first-report',
-				'trans' => 'Kaydet'
+				'trans' => 'Kaydet',
 			),
 			'send' => array(
 				'next-step'=>'first-report-waiting-app',
 				'next-zone'=>'first-report',
 				#TODO say in turkish
-				'trans' => 'Danismana Gonder'
+				'trans' => 'Danismana Gonder',
+				'notify' => array(
+					'advisor_id' => array(
+						'message'=> "Öğrencilerden biri onaylamanız için size 1. Ara Rapor Yolladı yolladı",
+						'url' => 'processes/imanage',
+						'includeId' => true
+					)
+				)
 			)
 		),
 		'fields' => array(
 			'first_report',
+			'first_report_commect',
+		),
+		'restrictedFields' => array(
 			'first_report_commect',
 		),
 		'zone' => 'first-report'
@@ -541,18 +607,35 @@ Configure::write('process_road', array(
 			'deny' => array(
 				'next-step'=>'first-report',
 				'next-zone'=>'first-report',
-				'trans' => 'Reddet'
+				'trans' => 'Reddet',
+				'notify' => array(
+					'student_id' => array(
+						'message'=> "Seçtiğiniz Danışman 1. Ara Raporunuzu Reddetti",
+						'url' => 'processes/manage',
+						'includeId' => false
+					)
+				)
 			),
 			'approve' => array(
 				'next-step'=>'first-report',
 				'next-zone'=>'first-report',
 				#TODO say in turkish
-				'trans' => 'Onayla'
+				'trans' => 'Onayla',
+				'notify' => array(
+					'student_id' => array(
+						'message'=> "Seçtiğiniz Danışman 1. Ara Raporunuzu Onayladı",
+						'url' => 'processes/manage',
+						'includeId' => false
+					)
+				)
 			)
 		),
 		'fields' => array(
 			'first_report',
 			'first_report_commect',
+		),
+		'restrictedFields' => array(
+			'first_report',
 		),
 		'zone' => 'first-report'
 	),
