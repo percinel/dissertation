@@ -9,7 +9,6 @@ class UsersController extends AppController {
 	public function login() {
 		if($this->request->is('post')) {
 			if($this->Auth->login()){
-				
 				$user = $this->Auth->user();
 				$role = $user['role'];
 				
@@ -28,7 +27,7 @@ class UsersController extends AppController {
 					'controller'=>'users','action'=>'manage'
 				)));
 			}
-			$this->Session->setFlash(__('Invalid username or passwd, try again'));
+			$this->Session->setFlash(__('Invalid username or password '),'login_error');
 		}
 	}
 

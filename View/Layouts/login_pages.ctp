@@ -29,13 +29,15 @@ $cakeDescription = __d('cake_dev', 'Dissertation Management');
         <![endif]-->
     </head>
     <body class="bg-black">
-
         <div class="form-box" id="login-box">
-			<?php echo $this->Session->flash(); ?>
+			<div class="margin text-center">
+				<p>
+					<img src='/favicon.ico'/>
+					<span><?php echo __('Istanbul Bilgi Universty'); ?></span>
+				</p>
+			</div>
 			<?php echo $this->fetch('content'); ?>
         </div>
-
-
 		<?php echo $this->Html->script('jquery-2.0.2.min'); ?>
 		<?php echo $this->Html->script('bootstrap.min'); ?>
 
