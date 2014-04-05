@@ -39,19 +39,20 @@ class UsersController extends AppController {
 				$email_code = Security::hash(rand(1000,10000000).$email.rand(1000,10000000), NULL, true);
 				$message = "You can either follow the <a href='".Router::fullbaseUrl()."/users/confirm/".$email_code."'>link</a><br/>Or you can confirm your email by entering this code $email_code to your ";
 				if($this->sendMail($email,'Email Confirmation Link',$message)) {
-                	$this->Session->setFlash(__('Please check your mail box , we have send a confirmation link.'));
+                	$this->Session->setFlash(__('Please check your mail box , we have send a confirmation link.'),'login_error');
 					$this->User->saveField('email',$email);
 					$this->User->saveField('email_code',$email_code);
 					$this->User->saveField('email_validated',1);
 					$this->Session->write('Auth', $this->User->read(null, $this->Auth->user('id')));
                 	return $this->redirect(array('action' => 'confirm'));
 				}
-                $this->Session->setFlash(__('There is a serious error, please contact with the it help desk'));
+                $this->Session->setFlash(__('There is a serious error, please contact with the it help desk','login_error'));
             } else {
-                $this->Session->setFlash(__('Please enter a valid email account.'));
+                $this->Session->setFlash(__('invalid email'),'login_error');
                 return $this->redirect('get_mail');
 			}
         }
+        $this->Session->setFlash(__('please validate your email'),'login_error');
 	}
 
 	public function confirm($passcode = null) {
@@ -75,7 +76,7 @@ class UsersController extends AppController {
                 return $this->redirect(array('action' => 'home'));
 				
 			} else {
-                $this->Session->setFlash(__('You have a very serious error with your account, please contact with the ithelpdesk'));
+                $this->Session->setFlash(__('You have a very serious error with your account, please contact with the ithelpdesk'),'login_error');
                 return $this->redirect(array('action' => 'logout'));
 			}
         }
