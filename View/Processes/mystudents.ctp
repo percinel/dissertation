@@ -10,7 +10,7 @@
   <td><?=$this->Diss->getZoneTrans($p['Process']['zone'])?></td>
   <td>
 		<?php 
-			if(in_array($p['Process']['step'],Configure::read('instructor_resp'))) {
+			if($this->Diss->hasWorkToDo('instructor',$p)) {
 				echo $this->Html->link('Ilgilenmeniz Gerekiyor',array('controller'=>'processes','action'=>'imanage',$p['Process']['id']),array('style'=>'color:red'));
 			}else {
 				echo '<span style="color:green">Surec Ogrenciyi Bekliyor</span>';

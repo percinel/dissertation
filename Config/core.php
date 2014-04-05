@@ -355,41 +355,10 @@ Cache::config('_cake_model_', array(
 Configure::write('dissertation_url','http://localhost/');
 
 Configure::write('process_zones_translations', array(
-	'10' => 'Proje Oneri Formu',
-	'20' => 'Proje Onay Formu',
-	'30' => 'Birinci Ara Rapor',
-	'40' => 'Ikinci Ara Rapor'
-));
-
-Configure::write('process_zones', array(
-	'10' => 'project-intent',
-	'20' => 'project-approval',
-	'30' => 'first-report',
-	'40' => 'second-report'
-));
-Configure::write('process_zones_num', array(
-	'project-intent' => '10',
-	'project-approval' => '20',
-	'first-report' => '30',
-	'second-report' => '40'
-));
-
-Configure::write('process_steps', array(
-	'10' => 'project-intent',
-	'20' => 'project-intent-waiting-app',
-	'30' => 'project-approval',
-	'40' => 'project-approval-waiting-app',
-	'50' => 'first-report',
-	'60' => 'first-report-waiting-app',
-));
-
-Configure::write('process_steps_num', array(
-	'project-intent' => '10',
-	'project-intent-waiting-app' => '20',
-	'project-approval' => '30',
-	'project-approval-waiting-app' => '40',
-	'first-report' => '50',
-	'first-report-waiting-app' => '60',
+	'project-intent' => 'Proje Oneri Formu',
+	'project-approval' => 'Proje Onay Formu',
+	'first-report' => 'Birinci Ara Rapor',
+	'second-report' => 'Ikinci Ara Rapor'
 ));
 
 Configure::write('allfields',array(
@@ -428,10 +397,6 @@ Configure::write('allfields',array(
 Configure::write('instructor_resp',array(20,40,60));
 
 
-Configure::write('process_path',array(
-));
-
-
 Configure::write('process_road', array(
 	'project-intent' => array(
 		'owner'=>'student',
@@ -440,7 +405,6 @@ Configure::write('process_road', array(
 				'next-step'=>'project-intent',
 				'next-zone'=>'project-intent',
 				'trans' => 'Kaydet',
-				'notify' => array()
 			),
 			'send' => array(
 				'next-step'=>'project-intent-waiting-app',

@@ -1,5 +1,5 @@
 <?php 
-	$process_step_name = $steps[$process['Process']['step']];
+	$process_step_name = $process['Process']['step'];
 
 	foreach($zone_translations as $key => $translation):
 		if($process['Process']['zone'] == $key):

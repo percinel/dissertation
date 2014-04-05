@@ -105,30 +105,32 @@ class Process extends AppModel {
 	}
 
 	public function getNextStep($process,$action){
-		$current_step_name = $this->getCurrentStepName($process);
+		$current_step_name = $process['Process']['step'];
 		$step_conf = Configure::read('process_road');
 		$step_conf = $step_conf[$current_step_name];
 		$next_step = $step_conf['actions'][$action]['next-step'];
-		$numeric_step = Configure::read('process_steps_num');
-		return $numeric_step[$next_step];
+		return $next_step;
 	}
 
 	public function getNextZone($process,$action){
-		$current_step_name = $this->getCurrentStepName($process);
+		$current_step_name = $process['Process']['step'];
 		$step_conf = Configure::read('process_road');
 		$step_conf = $step_conf[$current_step_name];
 		$next_zone = $step_conf['actions'][$action]['next-zone'];
-		$numeric_zones = Configure::read('process_zones_num');
-		return $numeric_zones[$next_zone];
+		return $next_zone;
 	}
 
-	public function getProcessOwner($process) {
+	public function getOwnerRole($process) {
 		$process_step = $process['Process']['step'];
-		$process_steps = Configure::read('process_steps');	
-		$process_step_name = $process_steps[$process_step];
-		#project-intent
 		$process_road = Configure::read('process_road');
-		return $process_road[$process_step_name]['owner'];
-		
+		return $process_road[$process_step]['owner'];
 	}
+	public function isOwnerRole($role,$process) {
+		return $role == $this->getOwnerRole($process);
+	}
+
+
+
+
+
 }
