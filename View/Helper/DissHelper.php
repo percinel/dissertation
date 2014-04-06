@@ -16,7 +16,8 @@
 		}
 
 		public function getAvaliableActions($step) {
-			return $this->getStepOpt($step, 'actions');
+			$o = Configure::read('process_actions');
+			return $o[$step];
 		}
 
 		public function getZoneTrans($zone) {

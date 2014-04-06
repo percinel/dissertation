@@ -394,32 +394,158 @@ Configure::write('allfields',array(
 	), 
 ));
 
-Configure::write('instructor_resp',array(20,40,60));
+
+
+Configure::write('process_actions',array(
+	'project-intent' => array(
+		'save' => array(
+			'next-step'=>'project-intent',
+			'next-zone'=>'project-intent',
+			'trans' => 'Kaydet',
+			'notify' => array()
+		),
+		'send' => array(
+			'next-step'=>'project-intent-waiting-app',
+			'next-zone'=>'project-intent',
+			#TODO say in turkish
+			'trans' => 'Danismana Gonder',
+			'notify' => array(
+				'advisor_id' => array(
+					'message'=> "Öğrencilerden biri onaylamanız için size Proje Öneri Formu yolladı",
+					'url' => 'processes/imanage',
+					'includeId' => true
+				)
+			)
+		)
+	),
+	'project-intent-waiting-app' => array(
+		'deny' => array(
+			'next-step'=>'project-intent',
+			'next-zone'=>'project-intent',
+			'trans' => 'Reddet',
+			'notify' => array(
+				'student_id' => array(
+					'message'=> "Seçtiğiniz Danışman Proje Öneri Formunuzu Reddetti",
+					'url' => 'processes/manage',
+					'includeId' => false
+				)
+			)
+		),
+		'approve' => array(
+			'next-step'=>'project-approval',
+			'next-zone'=>'project-approval',
+			#TODO say in turkish
+			'trans' => 'Onayla',
+			'notify' => array(
+				'student_id' => array(
+					'message'=> "Seçtiğiniz Danışman Proje Öneri Formunuzu Onayladı",
+					'url' => 'processes/manage',
+					'includeId' => false
+				)
+			)
+		),
+	),
+	'project-approval' => array(
+		'save' => array(
+			'next-step'=>'project-approval',
+			'next-zone'=>'project-approval',
+			'trans' => 'Kaydet'
+		),
+		'send' => array(
+			'next-step'=>'project-approval-waiting-app',
+			'next-zone'=>'project-approval',
+			#TODO say in turkish
+			'trans' => 'Danismana Gonder',
+			'notify' => array(
+				'advisor_id' => array(
+					'message'=> "Öğrencilerden biri onaylamanız için size Proje Onay Formu yolladı",
+					'url' => 'processes/imanage',
+					'includeId' => true
+				)
+			)
+		)
+	),
+	'project-approval-waiting-app' => array(
+		'deny' => array(
+			'next-step'=>'project-approval',
+			'next-zone'=>'project-approval',
+			'trans' => 'Reddet',
+			'notify' => array(
+				'student_id' => array(
+					'message'=> "Seçtiğiniz Danışman Proje Onay Formunuzu Reddetti",
+					'url' => 'processes/manage',
+					'includeId' => false
+				)
+			)
+		),
+		'approve' => array(
+			'next-step'=>'first-report',
+			'next-zone'=>'first-report',
+			#TODO say in turkish
+			'trans' => 'Onayla',
+			'notify' => array(
+				'student_id' => array(
+					'message'=> "Seçtiğiniz Danışman Proje Onay Formunuzu Onayladı",
+					'url' => 'processes/manage',
+					'includeId' => false
+				)
+			)
+		)
+	),
+	'first-report' => array(
+		'save' => array(
+			'next-step'=>'first-report',
+			'next-zone'=>'first-report',
+			'trans' => 'Kaydet',
+		),
+		'send' => array(
+			'next-step'=>'first-report-waiting-app',
+			'next-zone'=>'first-report',
+			#TODO say in turkish
+			'trans' => 'Danismana Gonder',
+			'notify' => array(
+				'advisor_id' => array(
+					'message'=> "Öğrencilerden biri onaylamanız için size 1. Ara Rapor Yolladı yolladı",
+					'url' => 'processes/imanage',
+					'includeId' => true
+				)
+			)
+		)
+	),
+	'first-report-waiting-app' => array(
+		'deny' => array(
+			'next-step'=>'first-report',
+			'next-zone'=>'first-report',
+			'trans' => 'Reddet',
+			'notify' => array(
+				'student_id' => array(
+					'message'=> "Seçtiğiniz Danışman 1. Ara Raporunuzu Reddetti",
+					'url' => 'processes/manage',
+					'includeId' => false
+				)
+			)
+		),
+		'approve' => array(
+			'next-step'=>'first-report',
+			'next-zone'=>'first-report',
+			#TODO say in turkish
+			'trans' => 'Onayla',
+			'notify' => array(
+				'student_id' => array(
+					'message'=> "Seçtiğiniz Danışman 1. Ara Raporunuzu Onayladı",
+					'url' => 'processes/manage',
+					'includeId' => false
+				)
+			)
+		)
+	),
+));
+
 
 
 Configure::write('process_road', array(
 	'project-intent' => array(
 		'owner'=>'student',
-		'actions' => array(
-			'save' => array(
-				'next-step'=>'project-intent',
-				'next-zone'=>'project-intent',
-				'trans' => 'Kaydet',
-			),
-			'send' => array(
-				'next-step'=>'project-intent-waiting-app',
-				'next-zone'=>'project-intent',
-				#TODO say in turkish
-				'trans' => 'Danismana Gonder',
-				'notify' => array(
-					'advisor_id' => array(
-						'message'=> "Öğrencilerden biri onaylamanız için size Proje Öneri Formu yolladı",
-						'url' => 'processes/imanage',
-						'includeId' => true
-					)
-				)
-			)
-		),
 		'fields' => array(
 			'advisor_id',
 			'project_header',
@@ -433,33 +559,6 @@ Configure::write('process_road', array(
 	),
 	'project-intent-waiting-app' => array(
 		'owner'=>'instructor',
-		'actions' => array(
-			'deny' => array(
-				'next-step'=>'project-intent',
-				'next-zone'=>'project-intent',
-				'trans' => 'Reddet',
-				'notify' => array(
-					'student_id' => array(
-						'message'=> "Seçtiğiniz Danışman Proje Öneri Formunuzu Reddetti",
-						'url' => 'processes/manage',
-						'includeId' => false
-					)
-				)
-			),
-			'approve' => array(
-				'next-step'=>'project-approval',
-				'next-zone'=>'project-approval',
-				#TODO say in turkish
-				'trans' => 'Onayla',
-				'notify' => array(
-					'student_id' => array(
-						'message'=> "Seçtiğiniz Danışman Proje Öneri Formunuzu Onayladı",
-						'url' => 'processes/manage',
-						'includeId' => false
-					)
-				)
-			)
-		),
 		'fields' => array(
 			'project_header',
 			'project_intent',
@@ -473,26 +572,6 @@ Configure::write('process_road', array(
 	),
 	'project-approval' => array(
 		'owner'=>'student',
-		'actions' => array(
-			'save' => array(
-				'next-step'=>'project-approval',
-				'next-zone'=>'project-approval',
-				'trans' => 'Kaydet'
-			),
-			'send' => array(
-				'next-step'=>'project-approval-waiting-app',
-				'next-zone'=>'project-approval',
-				#TODO say in turkish
-				'trans' => 'Danismana Gonder',
-				'notify' => array(
-					'advisor_id' => array(
-						'message'=> "Öğrencilerden biri onaylamanız için size Proje Onay Formu yolladı",
-						'url' => 'processes/imanage',
-						'includeId' => true
-					)
-				)
-			)
-		),
 		'fields' => array(
 			'project_header_perm',
 		), 
@@ -501,33 +580,6 @@ Configure::write('process_road', array(
 	),
 	'project-approval-waiting-app' => array(
 		'owner'=>'instructor',
-		'actions' => array(
-			'deny' => array(
-				'next-step'=>'project-approval',
-				'next-zone'=>'project-approval',
-				'trans' => 'Reddet',
-				'notify' => array(
-					'student_id' => array(
-						'message'=> "Seçtiğiniz Danışman Proje Onay Formunuzu Reddetti",
-						'url' => 'processes/manage',
-						'includeId' => false
-					)
-				)
-			),
-			'approve' => array(
-				'next-step'=>'first-report',
-				'next-zone'=>'first-report',
-				#TODO say in turkish
-				'trans' => 'Onayla',
-				'notify' => array(
-					'student_id' => array(
-						'message'=> "Seçtiğiniz Danışman Proje Onay Formunuzu Onayladı",
-						'url' => 'processes/manage',
-						'includeId' => false
-					)
-				)
-			)
-		),
 		'fields' => array(
 			'project_header_perm',
 		),
@@ -536,26 +588,6 @@ Configure::write('process_road', array(
 	),
 	'first-report' => array(
 		'owner'=>'student',
-		'actions' => array(
-			'save' => array(
-				'next-step'=>'first-report',
-				'next-zone'=>'first-report',
-				'trans' => 'Kaydet',
-			),
-			'send' => array(
-				'next-step'=>'first-report-waiting-app',
-				'next-zone'=>'first-report',
-				#TODO say in turkish
-				'trans' => 'Danismana Gonder',
-				'notify' => array(
-					'advisor_id' => array(
-						'message'=> "Öğrencilerden biri onaylamanız için size 1. Ara Rapor Yolladı yolladı",
-						'url' => 'processes/imanage',
-						'includeId' => true
-					)
-				)
-			)
-		),
 		'fields' => array(
 			'first_report',
 			'first_report_commect',
@@ -567,33 +599,6 @@ Configure::write('process_road', array(
 	),
 	'first-report-waiting-app' => array(
 		'owner'=>'instructor',
-		'actions' => array(
-			'deny' => array(
-				'next-step'=>'first-report',
-				'next-zone'=>'first-report',
-				'trans' => 'Reddet',
-				'notify' => array(
-					'student_id' => array(
-						'message'=> "Seçtiğiniz Danışman 1. Ara Raporunuzu Reddetti",
-						'url' => 'processes/manage',
-						'includeId' => false
-					)
-				)
-			),
-			'approve' => array(
-				'next-step'=>'first-report',
-				'next-zone'=>'first-report',
-				#TODO say in turkish
-				'trans' => 'Onayla',
-				'notify' => array(
-					'student_id' => array(
-						'message'=> "Seçtiğiniz Danışman 1. Ara Raporunuzu Onayladı",
-						'url' => 'processes/manage',
-						'includeId' => false
-					)
-				)
-			)
-		),
 		'fields' => array(
 			'first_report',
 			'first_report_commect',
@@ -604,23 +609,3 @@ Configure::write('process_road', array(
 		'zone' => 'first-report'
 	),
 ));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

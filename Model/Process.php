@@ -105,19 +105,17 @@ class Process extends AppModel {
 	}
 
 	public function getNextStep($process,$action){
-		$current_step_name = $process['Process']['step'];
-		$step_conf = Configure::read('process_road');
-		$step_conf = $step_conf[$current_step_name];
-		$next_step = $step_conf['actions'][$action]['next-step'];
-		return $next_step;
+		$step = $process['Process']['step'];
+		$actions = Configure::read('process_actions');
+		$step_action = $actions[$step][$action];
+		return $step_action['next-step'];
 	}
 
 	public function getNextZone($process,$action){
-		$current_step_name = $process['Process']['step'];
-		$step_conf = Configure::read('process_road');
-		$step_conf = $step_conf[$current_step_name];
-		$next_zone = $step_conf['actions'][$action]['next-zone'];
-		return $next_zone;
+		$step = $process['Process']['step'];
+		$actions = Configure::read('process_actions');
+		$step_action = $actions[$step][$action];
+		return $step_action['next-zone'];
 	}
 
 	public function getOwnerRole($process) {
