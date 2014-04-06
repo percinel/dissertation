@@ -12,13 +12,12 @@ $cakeDescription = __d('cake_dev', 'Dissertation Management');
 		</title>
 		<?php
 			echo $this->Html->meta('icon');
-			echo $this->Html->css('bootstrap.min.css');
+			echo $this->Html->css('bootstrap.min');
 			echo $this->Html->css('font-awesome.min');
 			echo $this->Html->css('AdminLTE');
 			echo $this->fetch('meta');
 			echo $this->fetch('css');
 			echo $this->fetch('script');
-			echo $this->Html->script('jquery-1.11.0');
 		?>
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
