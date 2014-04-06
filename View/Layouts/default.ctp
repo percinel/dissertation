@@ -25,8 +25,13 @@ $cakeDescription = __d('cake_dev', 'Dissertation Management');
 			<h1>Dissertation Thesis Management</h1>
 			<?php if(!empty($authUser)): ?> 
 			<div id="menu_controls">
+				<?php if($authUser['role']=='pia'): ?>
+					<?php echo $this->Html->link('All Students',array('controller'=>'processes','action'=>'allstudents')); ?>
+				<?php endif; ?>
 				<?php if($authUser['role']=='instructor'): ?>
-					<?php echo $this->Html->link('My Students',array('controller'=>'processes','action'=>'mystudents')); ?>
+					<?php echo $this->Html->link('Adviced Students',array('controller'=>'processes','action'=>'mystudents')); ?>
+					&nbsp;&nbsp;|| &nbsp;&nbsp;
+					<?php echo $this->Html->link('SecondReader Students',array('controller'=>'processes','action'=>'srstudents')); ?>
 				<?php endif; ?>
 				<?php if($authUser['role']=='student'): ?>
 					<?php echo $this->Html->link('My Dissertation',array('controller'=>'processes','action'=>'manage')); ?>
