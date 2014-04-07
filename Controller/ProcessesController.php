@@ -9,6 +9,24 @@ class ProcessesController extends AppController {
 		$this->set('processes', $this->Paginator->paginate());
 	}
 
+	public function srstudents() {
+		#TODO only instructors allowed here
+		$user_id = $this->Auth->user('id');
+		$processes = $this->Process->find('all',array('conditions'=>array(
+			'Process.sreader_id'=>$user_id
+		)));
+		$this->set(compact('processes'));
+	}
+
+	public function allstudents() {
+		#TODO only instructors allowed here
+		$user_id = $this->Auth->user('id');
+		$processes = $this->Process->find('all',array('conditions'=>array(
+			'Process.pia_id'=>$user_id
+		)));
+		$this->set(compact('processes'));
+	}
+
 	public function mystudents() {
 		#TODO only instructors allowed here
 		$user_id = $this->Auth->user('id');
@@ -21,25 +39,37 @@ class ProcessesController extends AppController {
 	public function manage() {
 		$user = $this->Auth->user();
 		$process = $this->Process->getStudentProcess($user['id']);
-		if('student' != $this->Process->getProcessOwner($process)){
-			$this->set(compact('process'));
-			$this->render('viewprocess');
-			return;
-		}
 		$this->set(compact('process'));
+		if(!$this->Process->isOwnerRole('student',$process)) {
+			$this->render('viewprocess');
+		}
 	}
 
 	public function imanage($id=null) {
 		$user = $this->Auth->user();
-		$process = $this->Process->find('first',array(
-			'conditions' => array('Process.id'=>$id)
-		));
-		if('instructor' != $this->Process->getProcessOwner($process)){
-			$this->set(compact('process'));
-			$this->render('viewprocess');
-			return;
-		}
+		$process = $this->Process->find('first',array('conditions' => array('Process.id'=>$id)));
 		$this->set(compact('process'));
+		if(!$this->Process->isOwnerRole('instructor',$process)){
+			$this->render('viewprocess');
+		}
+	}
+
+	public function pmanage($id=null) {
+		$user = $this->Auth->user();
+		$process = $this->Process->find('first',array('conditions' => array('Process.id'=>$id)));
+		$this->set(compact('process'));
+		if(!$this->Process->isOwnerRole('pia',$process)){
+			$this->render('viewprocess');
+		}
+	}
+
+	public function srmanage($id=null) {
+		$user = $this->Auth->user();
+		$process = $this->Process->find('first',array('conditions' => array('Process.id'=>$id)));
+		$this->set(compact('process'));
+		if(!$this->Process->isOwnerRole('sreader',$process)){
+			$this->render('viewprocess');
+		}
 	}
 
 	public function view($id = null) {
@@ -50,6 +80,50 @@ class ProcessesController extends AppController {
 		$this->set('process', $this->Process->find('first', $options));
 	}
 
+	# is only for pia
+	public function srdecide() {
+		if ($this->request->is('post')) {
+			$post = $this->request->data;
+			$student_id = $this->Auth->user('id');
+
+			$current_process = $this->Process->find('first',array('conditions' => array('Process.' . $this->Process->primaryKey => $post['Process']['id'])));
+
+			#copy to log
+			if(!$this->Process->copyToLog($current_process,$student_id)){
+				$this->Session->setFlash(__('This is a serious error, please contact to the developers.'));
+				return $this->redirect(array('action' => 'srstudents'));
+			}
+
+			if(!$this->Process->applyAction($current_process,$post,$student_id)){
+				$this->Session->setFlash(__('This is a serious error, please contact to the developers.'));
+				return $this->redirect(array('action' => 'srstudents'));
+			}
+			$this->Session->setFlash(__('Ok you are done'));
+			return $this->redirect(array('action' => 'srstudents'));
+		}
+	}
+	# is only for pia
+	public function pdecide() {
+		if ($this->request->is('post')) {
+			$post = $this->request->data;
+			$student_id = $this->Auth->user('id');
+
+			$current_process = $this->Process->find('first',array('conditions' => array('Process.' . $this->Process->primaryKey => $post['Process']['id'])));
+
+			#copy to log
+			if(!$this->Process->copyToLog($current_process,$student_id)){
+				$this->Session->setFlash(__('This is a serious error, please contact to the developers.'));
+				return $this->redirect(array('action' => 'allstudents'));
+			}
+
+			if(!$this->Process->applyAction($current_process,$post,$student_id)){
+				$this->Session->setFlash(__('This is a serious error, please contact to the developers.'));
+				return $this->redirect(array('action' => 'allstudents'));
+			}
+			$this->Session->setFlash(__('Ok you are done'));
+			return $this->redirect(array('action' => 'allstudents'));
+		}
+	}
 	# is only for students
 	public function idecide() {
 		if ($this->request->is('post')) {

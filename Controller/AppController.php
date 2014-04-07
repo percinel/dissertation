@@ -57,7 +57,7 @@ class AppController extends Controller {
 		$this->set('zone_translations', Configure::read('process_zones_translations'));
 		$this->set('process_road', Configure::read('process_road'));
 		$this->loadModel('User');
-		$this->set('advisors', $this->User->find(
+		$advisors =  $this->User->find(
 			'list',
 			array(
 				#TODO username will not be here, it needs to be firstname + lastname
@@ -66,7 +66,23 @@ class AppController extends Controller {
 					'role' => 'instructor'
 				)
 			)
-		));
+		);
+		array_unshift($advisors,"Henuz Belirlenmemis");
+		$this->set('advisors',$advisors);
+		$sreaders =  $this->User->find(
+			'list',
+			array(
+				#TODO username will not be here, it needs to be firstname + lastname
+				'fields' => array('id','username'),
+				'conditions' => array(
+					'role' => 'instructor'
+				)
+			)
+		);
+		array_unshift($sreaders,"Henuz Belirlenmemis");
+		$this->set('sreaders',$sreaders);
+
+
 		if(!empty($authUser)) {
 			$this->set('notification_count',$this->User->Notification->find(
 				'count',

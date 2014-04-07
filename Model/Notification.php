@@ -63,13 +63,12 @@ class Notification extends AppModel {
 	);
 
 	public function handleNotification($process_id,$process,$action){
-		$current_step_name = $this->getCurrentStepName($process);
-		$step_conf = Configure::read('process_road');
-		$step_conf = $step_conf[$current_step_name];
-		if(!isset($step_conf['actions'][$action]['notify'])) {
-			return array();
+		$current_step_name = $process['Process']['step'];
+		$actions = Configure::read('process_actions');
+		if(!isset($actions[$current_step_name][$action]['notify'])) {
+			return true;
 		}
-		$notification_arr = $step_conf['actions'][$action]['notify'];
+		$notification_arr = $actions[$current_step_name][$action]['notify'];
 
 		$current_process = $this->User->Process->find('first',array(
 			'conditions' => array(

@@ -28,16 +28,16 @@ CREATE TABLE `logs` (
   `advisor_id` int(11) NOT NULL,
   `sreader_id` int(11) NOT NULL,
   `process_id` int(11) NOT NULL,
-  `step` int(1) NOT NULL,
-  `zone` int(1) NOT NULL,
+  `step` varchar(50) NOT NULL,
+  `zone` varchar(50) NOT NULL,
   `last_user` int(11) NOT NULL,
-  `last_action` varchar(50) NOT NULL,
-  `project_header` varchar(100) NOT NULL,
-  `project_intent` text NOT NULL,
-  `project_header_perm` varchar(100) NOT NULL,
-  `project_tags` text NOT NULL,
-  `first_report` varchar(100) NOT NULL,
-  `first_report_commect` text NOT NULL,
+  `last_action` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `project_header` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `project_intent` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `project_header_perm` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `project_tags` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `first_report` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `first_report_commect` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `is_valid` int(11) NOT NULL DEFAULT '1',
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
@@ -92,17 +92,17 @@ CREATE TABLE `processes` (
   `student_id` int(11) NOT NULL,
   `advisor_id` int(11) NOT NULL,
   `sreader_id` int(11) NOT NULL,
-  `step` int(1) NOT NULL,
-  `zone` int(1) NOT NULL,
+  `step` varchar(50) NOT NULL,
+  `zone` varchar(50) NOT NULL,
   `last_user` int(11) NOT NULL DEFAULT '0',
-  `last_action` varchar(50) NOT NULL DEFAULT 'created',
-  `project_header` varchar(100) NOT NULL,
-  `project_header_comment` text NOT NULL,
-  `project_intent` text NOT NULL,
-  `project_header_perm` varchar(100) NOT NULL,
-  `project_tags` text NOT NULL,
-  `first_report` varchar(100) NOT NULL,
-  `first_report_commect` text NOT NULL,
+  `last_action` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'created',
+  `project_header` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `project_header_comment` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `project_intent` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `project_header_perm` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `project_tags` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `first_report` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `first_report_commect` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `is_valid` int(11) NOT NULL DEFAULT '1',
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
@@ -116,7 +116,7 @@ CREATE TABLE `processes` (
 
 LOCK TABLES `processes` WRITE;
 /*!40000 ALTER TABLE `processes` DISABLE KEYS */;
-INSERT INTO `processes` VALUES (1,1,0,0,10,10,0,'','','','','','','','',1,'2014-02-20 00:00:00','2014-02-20 00:00:00'),(2,2,0,0,10,10,0,'','','','','','','','',1,'2014-02-20 00:00:00','2014-02-20 00:00:00');
+INSERT INTO `processes` VALUES (1,1,0,0,'project-intent','project-intent',0,'','','','','','','','',1,'2014-02-20 00:00:00','2014-02-20 00:00:00'),(2,2,0,0,'project-intent','project-intent',0,'','','','','','','','',1,'2014-02-20 00:00:00','2014-02-20 00:00:00');
 /*!40000 ALTER TABLE `processes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -160,4 +160,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-19  9:50:01
+-- Dump completed on 2014-04-05 12:00:03
