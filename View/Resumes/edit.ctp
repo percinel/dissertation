@@ -1,5 +1,10 @@
+<?php 
+$this->start('css'); 
+#	echo $this->Html->css('bootstrap-wysihtml5/bootstrap3-wysihtml5.min');
+$this->end(); 
+?>
 <div class="resumes form">
-<?php echo $this->Form->create('Resume'); ?>
+<?php echo $this->Form->create('Resume',array('inputDefaults'=>array('div'=>false))); ?>
 	<fieldset>
 		<legend><?php echo __('Edit Resume',array(
 			'action'=> 'resumes/edit/'.$authUser['id']
@@ -14,13 +19,22 @@
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-
-		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('Resume.id')), null, __('Are you sure you want to delete # %s?', $this->Form->value('Resume.id'))); ?></li>
-		<li><?php echo $this->Html->link(__('List Resumes'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
-	</ul>
-</div>
+<?php
+$this->start('script'); 
+	echo $this->Html->script('plugins/ckeditor/ckeditor');
+#	echo $this->Html->script('plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min');
+?>
+	<script type="text/javascript">
+        $(function() {
+            // Replace the <textarea id="editor1"> with a CKEditor
+            // instance, using default configuration.
+            CKEDITOR.replace('ResumeAreas');
+            CKEDITOR.replace('ResumeResume');
+            CKEDITOR.replace('ResumeContact');
+            //bootstrap WYSIHTML5 - text editor
+        	//$(".textarea").wysihtml5();
+        });
+    </script>
+<?php 
+$this->end(); 
+?>

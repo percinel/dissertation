@@ -19,7 +19,6 @@ $cakeDescription = __d('cake_dev', 'Dissertation Management');
 			echo $this->Html->css('AdminLTE');
 			echo $this->fetch('meta');
 			echo $this->fetch('css');
-			echo $this->fetch('script');
 		?>
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -356,6 +355,7 @@ $cakeDescription = __d('cake_dev', 'Dissertation Management');
 		<?php echo $this->Html->script('jquery-2.0.2.min'); ?>
 		<?php echo $this->Html->script('bootstrap.min'); ?>
 		<?php echo $this->Html->script('AdminLTE/app'); ?>
+		<?php echo $this->fetch('script'); ?>
 
     </body>
 </html>
