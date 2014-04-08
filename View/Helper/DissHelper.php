@@ -29,4 +29,47 @@
 			$o = Configure::read('process_road');
 			return $o[$step][$option];
 		}
+
+		public function getFullName($authUser) {
+			return $authUser['firstname'] ."&nbsp;". $authUser['lastname'];
+		}
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

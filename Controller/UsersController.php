@@ -102,6 +102,10 @@ class UsersController extends AppController {
 	}
 
 
+	public function advisors() {
+        $this->User->recursive = 0;
+        $this->set('users', $this->User->find('all',array('conditions'=>array('User.role'=>'instructor'))));
+	}
     public function index() {
         $this->User->recursive = 0;
         $this->set('users', $this->paginate());

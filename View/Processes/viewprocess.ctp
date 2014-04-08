@@ -10,6 +10,20 @@
 	endforeach;
 ?>
 <br/>
+<div class="progress">
+	<div class="progress-bar progress-bar-red" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+    	<span class="sr-only">80% Complete</span>
+    </div>
+	<div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+    	<span class="sr-only">80% Complete</span>
+    </div>
+	<div class="progress-bar progress-bar-blue" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+    	<span class="sr-only">80% Complete</span>
+    </div>
+	<div class="progress-bar progress-bar-yellow" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+    	<span class="sr-only">80% Complete</span>
+    </div>
+</div>
 
 <div class="hedes form">
 	<?php
