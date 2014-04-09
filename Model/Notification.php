@@ -62,6 +62,16 @@ class Notification extends AppModel {
 		)
 	);
 
+	public function sendSaveCv($instructor,$piaid) {
+		$this->create();
+		$notification = array(
+			'Notification' => array(
+				'user_id' => $piaid,
+				'message' => $instructor. " isimli danisman cv sini guncelledi" 
+			)
+		);
+		$this->save($notification);
+	}
 	public function handleNotification($process_id,$process,$action){
 		$current_step_name = $process['Process']['step'];
 		$actions = Configure::read('process_actions');

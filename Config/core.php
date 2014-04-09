@@ -360,7 +360,9 @@ Configure::write('process_zones_translations', array(
 	'first-report' => 'Birinci Ara Rapor',
 	'second-report' => 'Ikinci Ara Rapor',
 	'waiting-second-reader' => '2. Okuyucu Belirlenmesi',
-	'submit' => 'Teslim',
+	'submit-advisor-report' => 'Danisman Teslim Onayi',
+	'submit-sreader-report' => 'Ikinci Okuyucu Teslim Onayi',
+	'submitted' => 'Teslim Tamamlandi',
 ));
 
 Configure::write('allfields',array(
@@ -376,10 +378,12 @@ Configure::write('allfields',array(
 		'trans' => 'Proje Basligi' 
 	), 
 	'project_header_comment' => array(
-		'trans' => 'Danışman Proje Başlığı Yorumu' 
+		'trans' => 'Danışman Proje Başlığı Yorumu' ,
+		'ckeditor' => true
 	), 
 	'project_intent' => array(
-		'trans' => 'Proje Onerisi' 
+		'trans' => 'Proje Onerisi', 
+		'ckeditor' => true,
 	), 
 	'project_header_perm' => array(
 		'trans' => 'Proje Basligi' 
@@ -392,6 +396,7 @@ Configure::write('allfields',array(
 		'file' => true
 	), 
 	'first_report_comment' => array(
+		'ckeditor' => true,
 		'trans' => 'Danışman 1. Ara Rapor Yorumu' 
 	), 
 	'second_report' => array(
@@ -399,6 +404,7 @@ Configure::write('allfields',array(
 		'file' => true
 	), 
 	'second_report_comment' => array(
+		'ckeditor' => true,
 		'trans' => 'Danışman 2. Ara Rapor Yorumu' 
 	), 
 	'submit_advisor_report' => array(
@@ -406,6 +412,7 @@ Configure::write('allfields',array(
 		'file' => true
 	), 
 	'submit_advisor_report_comment' => array(
+		'ckeditor' => true,
 		'trans' => 'Proje Teslim Danisman Rapor Yorumu', 
 	), 
 	'submit_sreader_report' => array(
@@ -413,6 +420,7 @@ Configure::write('allfields',array(
 		'file' => true
 	), 
 	'submit_sreader_report_comment' => array(
+		'ckeditor' => true,
 		'trans' => 'Proje Teslim Ikinci Okuyucu Rapor Yorumu', 
 	), 
 ));
@@ -617,7 +625,7 @@ Configure::write('process_actions',array(
 	'waiting-second-reader' => array(
 		'set_sreader' => array(
 			'next-step'=>'submit-advisor-report',
-			'next-zone'=>'submit',
+			'next-zone'=>'submit-advisor-report',
 			'trans' => '2. Okuyucu Ata',
 			'notify' => array(
 				'student_id' => array(
@@ -641,12 +649,12 @@ Configure::write('process_actions',array(
 	'submit-advisor-report' => array(
 		'save' => array(
 			'next-step'=>'submit-advisor-report',
-			'next-zone'=>'submit',
+			'next-zone'=>'submit-advisor-report',
 			'trans' => 'Kaydet',
 		),
 		'send' => array(
 			'next-step'=>'submit-advisor-report-waiting-app',
-			'next-zone'=>'submit',
+			'next-zone'=>'submit-advisor-report',
 			#TODO say in turkish
 			'trans' => 'Danismana Gonder',
 			'notify' => array(
@@ -661,7 +669,7 @@ Configure::write('process_actions',array(
 	'submit-advisor-report-waiting-app' => array(
 		'deny' => array(
 			'next-step'=>'submit-advisor-report',
-			'next-zone'=>'submit',
+			'next-zone'=>'submit-advisor-report',
 			'trans' => 'Reddet',
 			'notify' => array(
 				'student_id' => array(
@@ -673,7 +681,7 @@ Configure::write('process_actions',array(
 		),
 		'approve' => array(
 			'next-step'=>'submit-sreader-report',
-			'next-zone'=>'submit',
+			'next-zone'=>'submit-sreader-report',
 			#TODO say in turkish
 			'trans' => 'Onayla',
 			'notify' => array(
@@ -688,12 +696,12 @@ Configure::write('process_actions',array(
 	'submit-sreader-report' => array(
 		'save' => array(
 			'next-step'=>'submit-sreader-report',
-			'next-zone'=>'submit',
+			'next-zone'=>'submit-sreader-report',
 			'trans' => 'Kaydet',
 		),
 		'send' => array(
 			'next-step'=>'submit-sreader-report-waiting-app',
-			'next-zone'=>'submit',
+			'next-zone'=>'submit-sreader-report',
 			#TODO say in turkish
 			'trans' => '2. Okuyucuya Gonder',
 			'notify' => array(
@@ -708,7 +716,7 @@ Configure::write('process_actions',array(
 	'submit-sreader-report-waiting-app' => array(
 		'deny' => array(
 			'next-step'=>'submit-sreader-report',
-			'next-zone'=>'submit',
+			'next-zone'=>'submit-sreader-report',
 			'trans' => 'Reddet',
 			'notify' => array(
 				'student_id' => array(
@@ -720,7 +728,7 @@ Configure::write('process_actions',array(
 		),
 		'approve' => array(
 			'next-step'=>'submitted',
-			'next-zone'=>'submit',
+			'next-zone'=>'submitted',
 			#TODO say in turkish
 			'trans' => 'Onayla',
 			'notify' => array(
@@ -853,7 +861,7 @@ Configure::write('process_road', array(
 		'restrictedFields' => array(
 			'submit_advisor_report_comment'
 		),
-		'zone' => 'submit'
+		'zone' => 'submit-advisor-report'
 	),
 	'submit-advisor-report-waiting-app' => array(
 		'owner'=>'instructor',
@@ -864,7 +872,7 @@ Configure::write('process_road', array(
 		'restrictedFields' => array(
 			'submit_advisor_report',
 		),
-		'zone' => 'submit'
+		'zone' => 'submit-advisor-report'
 	),
 	'submit-sreader-report' => array(
 		'owner'=>'student',
@@ -875,7 +883,7 @@ Configure::write('process_road', array(
 		'restrictedFields' => array(
 			'submit_sreader_report_comment'
 		),
-		'zone' => 'submit'
+		'zone' => 'submit-sreader-report'
 	),
 	'submit-sreader-report-waiting-app' => array(
 		'owner'=>'sreader',
@@ -886,16 +894,14 @@ Configure::write('process_road', array(
 		'restrictedFields' => array(
 			'submit_sreader_report',
 		),
-		'zone' => 'submit'
+		'zone' => 'submit-sreader-report'
 	),
 	'submitted' => array(
 		'owner' => 'pia',
 		'fields' => array(
-			'submit_sreader_report_comment',
 		),
 		'restrictedFields' => array(
-			'submit_sreader_report_comment',
 		),
-		'zone' => 'submit'
+		'zone' => 'submitted'
 	)
 ));

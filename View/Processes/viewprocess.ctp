@@ -1,45 +1,57 @@
+<div style='margin-bottom:5px;font-size:17px;'>
 <?php 
+
 	$process_step_name = $process['Process']['step'];
 
+	$before = true;
+	$main_state_trans = '';
 	foreach($zone_translations as $key => $translation):
 		if($process['Process']['zone'] == $key):
-			echo '<span class="zone_name current_zone_name">'.$translation.'</span>&nbsp;&nbsp;'; 
+			echo '<span class="label label-primary">'.$translation.'</span>'; 
+			$main_state_trans = $translation;
+			$before = false;
 		else:
-			echo '<span class="zone_name">'.$translation.'</span>&nbsp;&nbsp;'; 
+			if($before) {
+				echo '<span class="label label-success">'.$translation.'</span>'; 
+			} else {
+				echo '<span class="label label-danger">'.$translation.'</span>'; 
+			}
 		endif;
+		echo "&nbsp;";
 	endforeach;
 ?>
-<br/>
-<div class="progress">
-	<div class="progress-bar progress-bar-red" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-    	<span class="sr-only">80% Complete</span>
-    </div>
-	<div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-    	<span class="sr-only">80% Complete</span>
-    </div>
-	<div class="progress-bar progress-bar-blue" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-    	<span class="sr-only">80% Complete</span>
-    </div>
-	<div class="progress-bar progress-bar-yellow" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-    	<span class="sr-only">80% Complete</span>
-    </div>
-</div>
 
-<div class="hedes form">
+</div>
+<div class="box box-warning">
+	<div class="box-body">
 	<?php
 		$related_fields = $this->Diss->getStepFields($process_step_name);
 		$all_fields = Configure::read('allfields');
 		foreach($related_fields as $f):
+			$hede_value = '';
 			if(!empty($all_fields[$f]['relateddata'])):
 				$user_idsi = $process['Process'][$f];
 				eval('$field_value = $'. $all_fields[$f]['relateddata'] .'['.$user_idsi.'];');
-				echo $all_fields[$f]['trans'] . ':' .$field_value;
+				$hede_value = $field_value;
 			else:
-				echo $all_fields[$f]['trans'] . ':' .$process['Process'][$f];
+				$hede_value = $process['Process'][$f];
 			endif;
-			echo '<br/>';
+	?>
+					<div class="box ">
+						<div class="box-header">
+							<h3 class="box-title"><?php echo $all_fields[$f]['trans']?></h3>
+						</div><!-- /.box-header -->
+						<div class="box-body">
+							<?php echo $hede_value; ?>
+						</div>
+					</div>
+	<?php
 		endforeach;
 	?>
+	</div>
+</div>
+
+<div class="hedes form">
 </div>
 <?php
 	/*

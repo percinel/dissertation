@@ -93,6 +93,8 @@ class ResumesController extends AppController {
 		if ($this->request->is(array('post', 'put'))) {
 			$this->request->data['Resume']['user_id'] = $resume['Resume']['user_id'];
 			if ($this->Resume->save($this->request->data)) {
+				$this->Resume->User->Notification->sendSaveCv($this->Auth->user('firstname')." ".$this->Auth->user('lastname'),9);
+
 				$this->Session->setFlash(__('The resume has been saved.'));
 				return $this->redirect(array('controller'=>'resumes', 'action' => 'view', $resume['Resume']['user_id']));
 			} else {

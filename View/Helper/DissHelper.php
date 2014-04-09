@@ -31,6 +31,9 @@
 		}
 
 		public function getFullName($authUser) {
+			if(empty($authUser)) {
+				return "Belirlenmemis ..";
+			}
 			return $authUser['firstname'] ."&nbsp;". $authUser['lastname'];
 		}
 	}

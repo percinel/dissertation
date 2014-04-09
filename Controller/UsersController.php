@@ -6,6 +6,40 @@ class UsersController extends AppController {
         $this->Auth->allow('add','login');
     }
 
+	public function instructorlist() {
+		#TODO only instructors allowed here
+		#TODO containable
+		$users = $this->User->find('all',array(
+			'conditions'=>array(
+				'role'=>'instructor'
+			),
+			'recursive'=>-1
+		));
+		$res = array();
+		foreach($users as $u ) {
+			
+			$user_id = $u['User']['id'];
+
+			$acount = $this->User->Process->find('count', array(
+				'conditions'=>array(
+					'Process.advisor_id' => $user_id,
+				),
+			));
+			$srcount = $this->User->Process->find('count', array(
+				'conditions'=>array(
+					'Process.sreader_id' => $user_id,
+				),
+			));
+
+			$u['User']['acount'] = $acount;
+			$u['User']['srcount'] = $srcount;
+			$res[] = $u;
+		
+		}
+		$users = $res;
+		$this->set(compact('users'));
+	}
+
 	public function login() {
 		if($this->request->is('post')) {
 			if($this->Auth->login()){

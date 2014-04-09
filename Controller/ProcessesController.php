@@ -9,8 +9,40 @@ class ProcessesController extends AppController {
 		$this->set('processes', $this->Paginator->paginate());
 	}
 
-	public function srstudents() {
+	public function studentadvisorlist() {
 		#TODO only instructors allowed here
+		#TODO containable
+		$processes = $this->Process->find('all',array('conditions'=>array()));
+		$res = array();
+		foreach($processes as $p ) {
+			
+			$advisor_id = $p['Process']['advisor_id'];
+			$sreader_id = $p['Process']['sreader_id'];
+
+			$advisor = $this->Process->User->find('first', array(
+				'conditions'=>array(
+					'User.id' => $advisor_id,
+				),
+				'recursive' => -1,
+			));
+			$sreader = $this->Process->User->find('first', array(
+				'conditions'=>array(
+					'User.id' => $sreader_id,
+				),
+				'recursive' => -1,
+			));
+
+			$p['Advisor'] = isset($advisor['User'])?$advisor['User']:array() ;
+			$p['Sreader'] = isset($sreader['User'])?$sreader['User']:array() ;
+			unset($p['Log']);
+			$res[] = $p;
+		
+		}
+		$processes = $res;
+		$this->set(compact('processes'));
+	}
+	public function srstudents() {
+		#TODO only sreaders allowed here
 		$user_id = $this->Auth->user('id');
 		$processes = $this->Process->find('all',array('conditions'=>array(
 			'Process.sreader_id'=>$user_id
@@ -19,7 +51,7 @@ class ProcessesController extends AppController {
 	}
 
 	public function allstudents() {
-		#TODO only instructors allowed here
+		#TODO only pia allowed here
 		$user_id = $this->Auth->user('id');
 		$processes = $this->Process->find('all',array('conditions'=>array(
 			'Process.pia_id'=>$user_id
@@ -42,7 +74,10 @@ class ProcessesController extends AppController {
 		$this->set(compact('process'));
 		if(!$this->Process->isOwnerRole('student',$process)) {
 			$this->render('viewprocess');
+			return;
 		}
+		$this->set('action','decide');
+		$this->render('manage');
 	}
 
 	public function imanage($id=null) {
@@ -51,7 +86,10 @@ class ProcessesController extends AppController {
 		$this->set(compact('process'));
 		if(!$this->Process->isOwnerRole('instructor',$process)){
 			$this->render('viewprocess');
+			return;
 		}
+		$this->set('action','idecide');
+		$this->render('manage');
 	}
 
 	public function pmanage($id=null) {
@@ -60,7 +98,10 @@ class ProcessesController extends AppController {
 		$this->set(compact('process'));
 		if(!$this->Process->isOwnerRole('pia',$process)){
 			$this->render('viewprocess');
+			return;
 		}
+		$this->set('action','pdecide');
+		$this->render('manage');
 	}
 
 	public function srmanage($id=null) {
@@ -69,7 +110,10 @@ class ProcessesController extends AppController {
 		$this->set(compact('process'));
 		if(!$this->Process->isOwnerRole('sreader',$process)){
 			$this->render('viewprocess');
+			return;
 		}
+		$this->set('action','srdecide');
+		$this->render('manage');
 	}
 
 	public function view($id = null) {

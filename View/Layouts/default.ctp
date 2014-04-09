@@ -48,10 +48,10 @@ $cakeDescription = __d('cake_dev', 'Dissertation Management');
                     <ul class="nav navbar-nav">
                         <!-- Messages: style can be found in dropdown.less-->
                         <li class="dropdown messages-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <!--a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-envelope"></i>
                                 <span class="label label-success">4</span>
-                            </a>
+                            </a-->
                             <ul class="dropdown-menu">
                                 <li class="header">You have 4 messages</li>
                                 <li>
@@ -123,53 +123,39 @@ $cakeDescription = __d('cake_dev', 'Dissertation Management');
                             </ul>
                         </li>
                         <!-- Notifications: style can be found in dropdown.less -->
+						<!--nocache-->
                         <li class="dropdown notifications-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-warning"></i>
-                                <span class="label label-warning">10</span>
+								<?php if(count($notifies) > 0): ?>
+                                	<span class="label label-warning"><?php echo count($notifies); ?></span>
+								<?php else: ?>
+                                	<span class="label label-warning"></span>
+								<?php endif; ?>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="header">You have 10 notifications</li>
                                 <li>
                                     <!-- inner menu: contains the actual data -->
                                     <ul class="menu">
+										<?php foreach($notifies as $n): ?>
                                         <li>
-                                            <a href="#">
-                                                <i class="ion ion-ios7-people info"></i> 5 new members joined today
-                                            </a>
+                                            <a href="#" onclick="return false;">
+                                                <i class="fa fa-warning danger"></i> <?=$n['Notification']['message']?>
+											</a>
                                         </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-warning danger"></i> Very long description here that may not fit into the page and may cause design problems
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-users warning"></i> 5 new members joined
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="#">
-                                                <i class="ion ion-ios7-cart success"></i> 25 sales made
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="ion ion-ios7-person danger"></i> You changed your username
-                                            </a>
-                                        </li>
+										<?php endforeach; ?>
                                     </ul>
                                 </li>
-                                <li class="footer"><a href="#">View all</a></li>
+                                <li class="footer"><a href="/notifications/seeall">View all</a></li>
                             </ul>
                         </li>
+						<!--/nocache-->
                         <!-- Tasks: style can be found in dropdown.less -->
                         <li class="dropdown tasks-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <!--a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-tasks"></i>
                                 <span class="label label-danger">9</span>
-                            </a>
+                            </a-->
                             <ul class="dropdown-menu">
                                 <li class="header">You have 9 tasks</li>
                                 <li>
@@ -299,6 +285,9 @@ $cakeDescription = __d('cake_dev', 'Dissertation Management');
 							<?php echo $this->Html->link('<i class="fa fa-dashboard"></i> <span>All Students</span>',array('controller'=>'processes','action'=>'allstudents'),array('escape'=>false)); ?>
 							</li>
 							<li>
+							<?php echo $this->Html->link('<i class="fa fa-dashboard"></i> <span>All Instructors</span>',array('controller'=>'users','action'=>'instructorlist'),array('escape'=>false)); ?>
+							</li>
+							<li>
 							<?php echo $this->Html->link('<i class="fa fa-dashboard"></i> <span>Student Advisor List</span>',array('controller'=>'processes','action'=>'studentadvisorlist'),array('escape'=>false)); ?>
 							</li>
 						<?php endif; ?>
@@ -316,11 +305,32 @@ $cakeDescription = __d('cake_dev', 'Dissertation Management');
 						<?php if($authUser['role']=='student'): ?>
 							<li>
 							<?php echo $this->Html->link('<i class="fa fa-dashboard"></i> <span>My Project</span>',array('controller'=>'processes','action'=>'manage'),array('escape'=>false)); ?>
+							</li>
 							<li>
 							<?php echo $this->Html->link('<i class="fa fa-dashboard"></i> <span>Advisors</span>',array('controller'=>'users','action'=>'advisors'),array('escape'=>false)); ?>
 							</li>
-							</li>
 						<?php endif; ?>
+						<li class="treeview">
+							<a href="#">
+								<i class="fa fa-bar-chart-o"></i>
+								<span><?php echo __('Help Pages'); ?></span>
+								<i class="fa fa-angle-left pull-right"></i>
+							</a>
+							<ul class="treeview-menu">
+							<?php 
+								foreach($static_pages as $static_page):
+							?>
+									<li>
+										<a href="<?php echo $static_page['StaticPage']['url'] ?>">
+											<i class="fa fa-angle-double-right"></i> <?php echo $static_page['StaticPage']['title'] ?>
+										</a>
+									</li>
+							<?php
+								endforeach;
+							?>
+							</ul>
+						</li>
+
                     </ul>
                 </section>
                 <!-- /.sidebar -->
@@ -329,7 +339,7 @@ $cakeDescription = __d('cake_dev', 'Dissertation Management');
             <!-- Right side column. Contains the navbar and content of the page -->
             <aside class="right-side">                
                 <!-- Content Header (Page header) -->
-                <section class="content-header">
+                <!--section class="content-header">
                     <h1>
                         Blank page
                         <small>it all starts here</small>
@@ -339,12 +349,11 @@ $cakeDescription = __d('cake_dev', 'Dissertation Management');
                         <li><a href="#">Examples</a></li>
                         <li class="active">Blank page</li>
                     </ol>
-                </section>
+                </section-->
 
                 <!-- Main content -->
                 <section class="content">
                  
-					<h1>Dissertation Thesis Management</h1> 
 					<?php echo $this->Session->flash(); ?>
 					<?php echo $this->fetch('content'); ?>
 

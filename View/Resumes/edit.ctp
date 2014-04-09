@@ -1,8 +1,3 @@
-<?php 
-$this->start('css'); 
-#	echo $this->Html->css('bootstrap-wysihtml5/bootstrap3-wysihtml5.min');
-$this->end(); 
-?>
 <div class="resumes form">
 <?php echo $this->Form->create('Resume',array('inputDefaults'=>array('div'=>false))); ?>
 	<fieldset>
@@ -22,17 +17,12 @@ $this->end();
 <?php
 $this->start('script'); 
 	echo $this->Html->script('plugins/ckeditor/ckeditor');
-#	echo $this->Html->script('plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min');
 ?>
 	<script type="text/javascript">
         $(function() {
-            // Replace the <textarea id="editor1"> with a CKEditor
-            // instance, using default configuration.
             CKEDITOR.replace('ResumeAreas');
             CKEDITOR.replace('ResumeResume');
             CKEDITOR.replace('ResumeContact');
-            //bootstrap WYSIHTML5 - text editor
-        	//$(".textarea").wysihtml5();
         });
     </script>
 <?php 

@@ -56,6 +56,7 @@ class AppController extends Controller {
 		$this->set('steps', Configure::read('process_steps'));
 		$this->set('zone_translations', Configure::read('process_zones_translations'));
 		$this->set('process_road', Configure::read('process_road'));
+
 		$this->loadModel('User');
 		$advisors =  $this->User->find(
 			'list',
@@ -67,8 +68,8 @@ class AppController extends Controller {
 				)
 			)
 		);
-		array_unshift($advisors,"Henuz Belirlenmemis");
-		$this->set('advisors',$advisors);
+		$this->set('advisors', array(0=>__('Not set'))+$advisors);
+
 		$sreaders =  $this->User->find(
 			'list',
 			array(
@@ -79,20 +80,25 @@ class AppController extends Controller {
 				)
 			)
 		);
-		array_unshift($sreaders,"Henuz Belirlenmemis");
-		$this->set('sreaders',$sreaders);
+		$this->set('sreaders',array(0=>__('Not set'))+$sreaders);
+
+		$this->loadModel('StaticPage');
+		$this->set('static_pages', $this->StaticPage->find('all', array(
+			'recursive' => -1
+		)));
 
 
 		if(!empty($authUser)) {
-			$this->set('notification_count',$this->User->Notification->find(
-				'count',
+			$notifications = $this->User->Notification->find(
+				'all',
 				array(
 					'conditions'=>array(
 						'Notification.user_id' => $authUser['id'],
 						'Notification.read' => 0,
-					)
+					),
 				)
-			));
+			);
+			$this->set('notifies',$notifications);
 		}
 	}
 }
