@@ -3,7 +3,6 @@ $cakeDescription = __d('cake_dev', 'Dissertation Management');
 ?>
 <!DOCTYPE html>
 <html>
-<body>
 	<head>
 		<?php echo $this->Html->charset(); ?>
 		<title>
@@ -28,7 +27,7 @@ $cakeDescription = __d('cake_dev', 'Dissertation Management');
           <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
     </head>
-    <body class="skin-black">
+    <body class="skin-blue">
         <!-- header logo: style can be found in header.less -->
         <header class="header">
             <a href="index.html" class="logo">
