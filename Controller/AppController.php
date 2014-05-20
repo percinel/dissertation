@@ -15,7 +15,8 @@ class AppController extends Controller {
                 'controller' => 'users',
                 'action' => 'login',
             )
-        )
+        ),
+		'RequestHandler',
 	); 
 
 	public function sendMail($email,$subject,$message) {

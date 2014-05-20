@@ -11,6 +11,11 @@
 		public function getStepFields($step) {
 			return $this->getStepOpt($step, 'fields');
 		}
+
+		public function getFormPrototypes($step) {
+			return $this->getStepOpt($step, 'form_prototypes');
+		}
+
 		public function getRestrictedFields($step) {
 			return $this->getStepOpt($step, 'restrictedFields');
 		}
@@ -27,7 +32,10 @@
 	
 		public function getStepOpt($step,$option) {
 			$o = Configure::read('process_road');
-			return $o[$step][$option];
+			if(isset($o[$step][$option])) {
+				return $o[$step][$option];
+			}
+			return false;
 		}
 
 		public function getFullName($authUser) {

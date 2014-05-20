@@ -27,32 +27,53 @@
 	<div class="box box-warning">
 		<div class="box-body">
 			<?php 
-				echo $this->Form->create('Process',array(
+				
+				$related_fields = $this->Diss->getStepFields($process_step_name);
+				$restricted_fields = $this->Diss->getRestrictedFields($process_step_name);
+				$all_fields = Configure::read('allfields');
+
+				$options = array(
 					'action'=>$action,
 					'inputDefaults' => array(
 						'label' => false,
 						'div' => false
 					),
 					'role'=>"form",
-					
-				)); 
+				);
+
+
+				foreach($related_fields as $f):
+					if(!in_array($f, $restricted_fields)) {
+						if(!empty($all_fields[$f]['file'])) {
+							$options['type'] = 'file';
+						}
+					}
+				endforeach;
+				
+				echo $this->Form->create('Process',$options); 
 			?>
 			<?php
 				echo $this->Form->input('id',array('value'=>$process['Process']['id']));
 
-				$related_fields = $this->Diss->getStepFields($process_step_name);
-				$restricted_fields = $this->Diss->getRestrictedFields($process_step_name);
-				$all_fields = Configure::read('allfields');
 				foreach($related_fields as $f):
 					if(!in_array($f, $restricted_fields)) {
-						echo $this->Form->input($f,array(
+						$options = array(
 							'label'=>$all_fields[$f]['trans'],
 							'value'=>$process['Process'][$f],
 							'div'=>'form-group',
 							'class'=>'form-control',
-						));
+						);
+						if(!empty($all_fields[$f]['file'])) {
+							$options['type'] = 'file';
+						}
+						echo $this->Form->input($f,$options);
+						if(!empty($all_fields[$f]['file']) && !empty($process['Process'][$f]) ) {
+							echo " <span style='color:red;'>Current File</span>:".$this->Html->link('download',"/files/".$process['Process'][$f]);
+							echo "<br/>";
+						}
 					}
 				endforeach;
+
 				foreach($related_fields as $f):
 					if(in_array($f, $restricted_fields)) {
 				?>
@@ -61,7 +82,14 @@
 							<h3 class="box-title"><?php echo $all_fields[$f]['trans']?></h3>
 						</div><!-- /.box-header -->
 						<div class="box-body">
-							<?php echo $process['Process'][$f]; ?>
+						<?php
+								if(!empty($all_fields[$f]['file'])) {
+									echo $this->Html->link('download',"/files/".$process['Process'][$f]);
+								} else {
+									echo $process['Process'][$f];
+								}
+						?>
+							<?php  ?>
 						</div>
 					</div>
 				<?php
@@ -82,6 +110,23 @@
 			<?php echo $this->Form->end(); ?>
 		</div><!-- /.box-body -->
 	</div><!-- /.box -->
+							
+	<?php $form_examples = $this->Diss->getFormPrototypes($process_step_name); ?>
+	<?php if($form_examples): ?>
+	<div class="box box-warning">
+		<div class="box-header">
+			<h3 class="box-title">Form Prototypes</h3>
+		</div><!-- /.box-header -->
+		<div class="box-body">
+		<?php
+			foreach($form_examples as $action => $translation) {
+				echo $this->Html->link($translation,"/processes/".$action."/ex.pdf");
+				echo '<br/>';
+			}
+		?>
+		</div>
+	</div>
+	<?php endif; ?>
 
 
 <?php
@@ -93,8 +138,8 @@ $this->start('script');
 		foreach($avaliable_actions as $action_name => $action_values):
 			#TODO bazi fieldlar bos olamaz. Onlari confige yaz ve burda alert attirip yeni level e gecmesini onle
 	?>
-			$('#button_<?=$action_name?>').click(function(){
-				$('#last_action_input').val('<?=$action_name?>');
+			$('#button_<?php echo $action_name?>').click(function(){
+				$('#last_action_input').val('<?php echo $action_name?>');
 			});
 	<?
 		endforeach;

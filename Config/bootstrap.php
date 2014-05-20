@@ -86,6 +86,7 @@ CakePlugin::load('DebugKit');
  *
  * ));
  */
+CakePlugin::load('Dompdf', array('bootstrap' => true));
 Configure::write('Dispatcher.filters', array(
 	'AssetDispatcher',
 	'CacheDispatcher'

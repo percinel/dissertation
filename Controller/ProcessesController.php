@@ -9,6 +9,80 @@ class ProcessesController extends AppController {
 		$this->set('processes', $this->Paginator->paginate());
 	}
 
+	public function project_cover() {
+
+		$user = $this->Auth->user();
+		$process = $this->Process->getStudentProcess($user['id']);
+		if(empty($process)) {
+			$this->redirect('/users/logout');	
+			return false;
+		}
+
+        //$this->viewClass = 'Dompdf';
+		$params = array(
+			'download' => false,
+			'name' => '.pdf',
+			'paperOrientation' => 'portrait',
+        	'paperSize' => 'a4',
+			'process'=>$process,
+    	);
+    	$this->set($params);
+	}
+	public function project_final_submit_form() {
+
+		$user = $this->Auth->user();
+		$process = $this->Process->getStudentProcess($user['id']);
+		if(empty($process)) {
+			$this->redirect('/users/logout');	
+			return false;
+		}
+
+        //$this->viewClass = 'Dompdf';
+		$params = array(
+			'download' => false,
+			'name' => '.pdf',
+			'paperOrientation' => 'portrait',
+        	'paperSize' => 'a4',
+			'process'=>$process,
+    	);
+    	$this->set($params);
+	}
+
+	public function project_submit_form() {
+
+		$user = $this->Auth->user();
+		$process = $this->Process->getStudentProcess($user['id']);
+		if(empty($process)) {
+			$this->redirect('/users/logout');	
+			return false;
+		}
+
+		$advisor = $this->Process->User->find('first',array(
+			'recursive'=>-1,
+			'conditions'=>array(
+				'User.id'=>$process['Process']['advisor_id']
+			)
+		));
+		$pia = $this->Process->User->find('first',array(
+			'recursive'=>-1,
+			'conditions'=>array(
+				'User.id'=>$process['Process']['pia_id']
+			)
+		));
+
+        //$this->viewClass = 'Dompdf';
+		$params = array(
+			'download' => false,
+			'name' => '.pdf',
+			'paperOrientation' => 'portrait',
+        	'paperSize' => 'a4',
+			'process'=>$process,
+			'pia'=>$pia,
+			'advisor'=>$advisor
+    	);
+    	$this->set($params);
+	}
+
 	public function studentadvisorlist() {
 		#TODO only instructors allowed here
 		#TODO containable
@@ -124,7 +198,7 @@ class ProcessesController extends AppController {
 		$this->set('process', $this->Process->find('first', $options));
 	}
 
-	# is only for pia
+	# is only for second reader
 	public function srdecide() {
 		if ($this->request->is('post')) {
 			$post = $this->request->data;
@@ -168,7 +242,7 @@ class ProcessesController extends AppController {
 			return $this->redirect(array('action' => 'allstudents'));
 		}
 	}
-	# is only for students
+	# is only for instructors
 	public function idecide() {
 		if ($this->request->is('post')) {
 			$post = $this->request->data;

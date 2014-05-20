@@ -20,6 +20,16 @@ class NotificationsController extends AppController {
  *
  * @return void
  */
+	public function osman() {
+        //$this->viewClass = 'Dompdf';
+		$params = array(
+			'download' => false,
+			'name' => '.pdf',
+			'paperOrientation' => 'portrait',
+        	'paperSize' => 'a4'
+    	);
+    	$this->set($params);
+	}
 	public function index() {
 		$this->Notification->recursive = 0;
 		$this->set('notifications', $this->Paginator->paginate());

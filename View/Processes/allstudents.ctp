@@ -21,8 +21,12 @@
 							<td><?=$this->Diss->getZoneTrans($p['Process']['zone'])?></td>
 							<td>
 								<?php 
-									if($this->Diss->hasWorkToDo('instructor',$p)) {
+									if($this->Diss->hasWorkToDo('pia',$p)) {
+										if($p['Process']['step'] ==  'submitted') {
+										echo $this->Html->link('Proje Tamamlanmis',array('controller'=>'processes','action'=>'pmanage',$p['Process']['id']),array('style'=>'color:green'));
+										} else {
 										echo $this->Html->link('Ilgilenmeniz Gerekiyor',array('controller'=>'processes','action'=>'pmanage',$p['Process']['id']),array('style'=>'color:red'));
+										}
 									}else {
 										if($p['Process']['zone'] == 'submitted') : 
 											echo '<span style="color:green">Tamamlanmis</span>';

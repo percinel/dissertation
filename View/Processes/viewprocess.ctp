@@ -34,17 +34,22 @@
 				eval('$field_value = $'. $all_fields[$f]['relateddata'] .'['.$user_idsi.'];');
 				$hede_value = $field_value;
 			else:
-				$hede_value = $process['Process'][$f];
+				
+			if(!empty($all_fields[$f]['file'])) {
+					$hede_value = $this->Html->link('download',"/files/".$process['Process'][$f]);
+				} else {
+					$hede_value = $process['Process'][$f];
+				}
 			endif;
 	?>
-					<div class="box ">
-						<div class="box-header">
-							<h3 class="box-title"><?php echo $all_fields[$f]['trans']?></h3>
-						</div><!-- /.box-header -->
-						<div class="box-body">
-							<?php echo $hede_value; ?>
-						</div>
-					</div>
+			<div class="box ">
+				<div class="box-header">
+					<h3 class="box-title"><?php echo $all_fields[$f]['trans']?></h3>
+				</div><!-- /.box-header -->
+				<div class="box-body">
+					<?php echo $hede_value; ?>
+				</div>
+			</div>
 	<?php
 		endforeach;
 	?>

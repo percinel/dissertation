@@ -21,7 +21,7 @@
 							<td><?=$this->Diss->getZoneTrans($p['Process']['zone'])?></td>
 							<td>
 								<?php 
-									if($this->Diss->hasWorkToDo('instructor',$p)) {
+									if($this->Diss->hasWorkToDo('sreader',$p)) {
 										echo $this->Html->link('Ilgilenmeniz Gerekiyor',array('controller'=>'processes','action'=>'srmanage',$p['Process']['id']),array('style'=>'color:red'));
 									}else {
 										if($p['Process']['zone'] == 'submitted') : 

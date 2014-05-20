@@ -352,23 +352,26 @@ Cache::config('_cake_model_', array(
 	'serialize' => ($engine === 'File'),
 	'duration' => $duration
 ));
-Configure::write('dissertation_url','http://localhost/');
 
 Configure::write('process_zones_translations', array(
 	'project-intent' => 'Proje Oneri Formu',
 	'project-approval' => 'Proje Onay Formu',
+	'project-submit-form' => 'Proje Onay Formu Teslim',
 	'first-report' => 'Birinci Ara Rapor',
 	'second-report' => 'Ikinci Ara Rapor',
 	'waiting-second-reader' => '2. Okuyucu Belirlenmesi',
 	'submit-advisor-report' => 'Danisman Teslim Onayi',
 	'submit-sreader-report' => 'Ikinci Okuyucu Teslim Onayi',
+	'project-submit-forms' => 'Proje Teslim Formlari',
 	'submitted' => 'Teslim Tamamlandi',
 ));
 
+Configure::write('dissertation_url','https://disertation.bilgi.edu.tr/');
+Configure::write('images','/var/www/cakephp/app/webroot/files/');
 Configure::write('allfields',array(
 	'advisor_id' => array(
 		'trans' => 'Danisman', 
-		'relateddata' => 'advisors' 
+		'relateddata' => 'advisors',
 	), 
 	'sreader_id' => array(
 		'trans' => '2. Okuyucu',
@@ -386,10 +389,14 @@ Configure::write('allfields',array(
 		'ckeditor' => true,
 	), 
 	'project_header_perm' => array(
-		'trans' => 'Proje Basligi' 
+		'trans' => 'Proje Basligi Son Belirleme' 
 	), 
 	'project_tags' => array(
 		'trans' => 'Proje Etiketleri' 
+	), 
+	'project_submit_form' => array(
+		'trans' => 'Proje Danisman Onay Formu', 
+		'file' => true
 	), 
 	'first_report' => array(
 		'trans' => '1. Ara Rapor', 
@@ -422,6 +429,18 @@ Configure::write('allfields',array(
 	'submit_sreader_report_comment' => array(
 		'ckeditor' => true,
 		'trans' => 'Proje Teslim Ikinci Okuyucu Rapor Yorumu', 
+	), 
+	'project_final' => array(
+		'file' => true,
+		'trans' => 'Proje Final Dosyasi', 
+	), 
+	'project_final_submit_form' => array(
+		'file' => true,
+		'trans' => 'Bitirme Projesi Teslim Formu', 
+	), 
+	'project_cover' => array(
+		'file' => true,
+		'trans' => 'Proje Kapagi', 
 	), 
 ));
 
@@ -473,7 +492,8 @@ Configure::write('process_actions',array(
 					'url' => 'processes/manage',
 					'includeId' => false
 				)
-			)
+			),
+			'copy-field'=>array('project_header'=>'project_header_perm'),
 		),
 	),
 	'project-approval' => array(
@@ -510,13 +530,55 @@ Configure::write('process_actions',array(
 			)
 		),
 		'approve' => array(
+			'next-step'=>'project-submit-form',
+			'next-zone'=>'project-submit-form',
+			#TODO say in turkish
+			'trans' => 'Onayla',
+			'notify' => array(
+				'student_id' => array(
+					'message'=> "Seçtiğiniz Danışman Proje Onay Formunuzu Onayladı",
+					'url' => 'processes/manage',
+					'includeId' => false
+				)
+			)
+		)
+	),
+	'project-submit-form' => array(
+		'send' => array(
+			'next-step'=>'project-submit-form-waiting-app',
+			'next-zone'=>'project-submit-form',
+			#TODO say in turkish
+			'trans' => 'Project Idare Asistanina Gonder',
+			'notify' => array(
+				'pia_id' => array(
+					'message'=> "Öğrencilerden biri onaylamanız için size Proje Onay Formu Gercek Imza Dosyasi gonderdi",
+					'url' => 'processes/srmanage',
+					'includeId' => true
+				)
+			)
+		)
+	),
+	'project-submit-form-waiting-app' => array(
+		'deny' => array(
+			'next-step'=>'project-submit-form',
+			'next-zone'=>'project-submit-form',
+			'trans' => 'Geri Gonder',
+			'notify' => array(
+				'student_id' => array(
+					'message'=> "Proje Idare Asistani, Project Onay Formu Imzali Dosyanizi reddetti",
+					'url' => 'processes/manage',
+					'includeId' => false
+				)
+			)
+		),
+		'approve' => array(
 			'next-step'=>'first-report',
 			'next-zone'=>'first-report',
 			#TODO say in turkish
 			'trans' => 'Onayla',
 			'notify' => array(
 				'student_id' => array(
-					'message'=> "Seçtiğiniz Danışman Proje Onay Formunuzu Onayladı",
+					'message'=> "Project Idari Asistani, Project Onay Formu Imzali Dosyanizi onayladi",
 					'url' => 'processes/manage',
 					'includeId' => false
 				)
@@ -567,7 +629,8 @@ Configure::write('process_actions',array(
 					'url' => 'processes/manage',
 					'includeId' => false
 				)
-			)
+			),
+			'copy-field'=>array('first_report'=>'second_report'),
 		)
 	),
 	'second-report' => array(
@@ -663,7 +726,8 @@ Configure::write('process_actions',array(
 					'url' => 'processes/imanage',
 					'includeId' => true
 				)
-			)
+			),
+			'copy-field'=>array('second_report'=>'submit_advisor_report'),
 		)
 	),
 	'submit-advisor-report-waiting-app' => array(
@@ -690,7 +754,8 @@ Configure::write('process_actions',array(
 					'url' => 'processes/manage',
 					'includeId' => false
 				),
-			)
+			),
+			'copy-field'=>array('submit_advisor_report'=>'submit_sreader_report'),
 		)
 	),
 	'submit-sreader-report' => array(
@@ -727,8 +792,8 @@ Configure::write('process_actions',array(
 			)
 		),
 		'approve' => array(
-			'next-step'=>'submitted',
-			'next-zone'=>'submitted',
+			'next-step'=>'project-submit-forms',
+			'next-zone'=>'project-submit-forms',
 			#TODO say in turkish
 			'trans' => 'Onayla',
 			'notify' => array(
@@ -750,7 +815,50 @@ Configure::write('process_actions',array(
 			)
 		)
 	),
-	'submitted' => array(
+	'project-submit-forms' => array(
+		'send-pia' => array(
+			'next-step'=>'project-submit-forms-waiting-app',
+			'next-zone'=>'project-submit-forms',
+			#TODO say in turkish
+			'trans' => 'Project Idari Asistanina Gonder',
+			'notify' => array(
+				'pia_id' => array(
+					'message'=> "Ogrencilerinizden biri size final teslim formlarini gonderdi",
+					'url' => 'processes/pmanage',
+					'includeId' => true
+				),
+			)
+		)
+	),
+	'project-submit-forms-waiting-app' => array(
+		'deny' => array(
+			'next-step'=>'project-submit-forms',
+			'next-zone'=>'project-submit-forms',
+			'trans' => 'Reddet',
+			'notify' => array(
+				'student_id' => array(
+					'message'=> "Proje Idari Asistani Gonderdiginiz Final Teslim Formlarinizi Reddetti",
+					'url' => 'processes/manage',
+					'includeId' => false
+				)
+			)
+		),
+		'approve' => array(
+			'next-step'=>'submitted',
+			'next-zone'=>'submitted',
+			#TODO say in turkish
+			'trans' => 'Onayla',
+			'notify' => array(
+				'student_id' => array(
+					'message'=> "Project Idari Asistani Final Teslim Formlarini Onayladi",
+					'url' => 'processes/manage',
+					'includeId' => false
+				),
+			),
+			'copy-field'=>array('submit_sreader_report'=>'project_final'),
+		)
+	),
+	'submitted'=>array(
 	)
 ));
 
@@ -798,6 +906,25 @@ Configure::write('process_road', array(
 		),
 		'restrictedFields' => array('project_header_perm'),
 		'zone' => 'project-approval'
+	),
+	'project-submit-form' => array(
+		'owner'=>'student',
+		'fields' => array(
+			'project_submit_form',
+		), 
+		'restrictedFields' => array(),
+		'form_prototypes' => array(
+			'project_submit_form'=>'Proje Onay Form Example'	
+		),
+		'zone' => 'project-submit-form'
+	),
+	'project-submit-form-waiting-app' => array(
+		'owner'=>'pia',
+		'fields' => array(
+			'project_submit_form',
+		),
+		'restrictedFields' => array('project_submit_form'),
+		'zone' => 'project-submit-form'
 	),
 	'first-report' => array(
 		'owner'=>'student',
@@ -896,12 +1023,76 @@ Configure::write('process_road', array(
 		),
 		'zone' => 'submit-sreader-report'
 	),
+	'project-submit-forms' => array(
+		'owner' => 'student',
+		'fields' => array(
+			'project_cover',
+			'project_final_submit_form',
+		),
+		'restrictedFields' => array(
+		),
+		'form_prototypes' => array(
+			'project_cover'=>'Proje Kapak Example',
+			'project_final_submit_form'=>'Bitirme Projesi Teslim Formu Example',
+		),
+		'zone' => 'project-submit-forms'
+	),
+	'project-submit-forms-waiting-app' => array(
+		'owner' => 'pia',
+		'fields' => array(
+			'project_cover',
+			'project_final_submit_form',
+		),
+		'restrictedFields' => array(
+			'project_cover',
+			'project_final_submit_form',
+		),
+		'zone' => 'p'
+	),
 	'submitted' => array(
 		'owner' => 'pia',
 		'fields' => array(
+			'project_header',
+			'project_header_comment',
+			'project_intent',
+			'project_header_perm',
+			'project_tags',
+			'project_submit_form',
+			'first_report',
+			'first_report_comment',
+			'second_report',
+			'second_report_comment',
+			'submit_advisor_report',
+			'submit_advisor_report_comment',
+			'submit_sreader_report',
+			'submit_sreader_report_comment',
+			'project_final_submit_form',
+			'project_cover',
+			'project_final',
 		),
 		'restrictedFields' => array(
+			'project_header',
+			'project_header_comment',
+			'project_intent',
+			'project_header_perm',
+			'project_tags',
+			'project_submit_form',
+			'first_report',
+			'first_report_comment',
+			'second_report',
+			'second_report_comment',
+			'submit_advisor_report',
+			'submit_advisor_report_comment',
+			'submit_sreader_report',
+			'submit_sreader_report_comment',
+			'project_final_submit_form',
+			'project_cover',
+			'project_final',
 		),
 		'zone' => 'submitted'
 	)
 ));
+
+
+
+
